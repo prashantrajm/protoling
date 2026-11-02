@@ -235,3 +235,7 @@ vite/                  project discovery and the read-only dev endpoint
 ## Contributing
 
 Contributions are welcome: bug reports, ideas, docs and pull requests. Read the [contributing guide](CONTRIBUTING.md) to get set up, and please follow the [code of conduct](CODE_OF_CONDUCT.md). Report security problems privately, as described in the [security policy](SECURITY.md). Changes are listed in the [changelog](CHANGELOG.md).
+
+## License
+
+[MIT](LICENSE) © 2026 Prashant Raj

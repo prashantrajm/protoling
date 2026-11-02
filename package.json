@@ -2,6 +2,7 @@
   "name": "protoling",
   "version": "0.1.0",
   "description": "Prototype mobile apps — screens, navigation and motion — in code.",
+  "license": "MIT",
   "private": true,
   "packageManager": "bun@1.4.2",
   "repository": {
