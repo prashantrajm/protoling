@@ -101,6 +101,11 @@ export function StackScreen({ children }: { children: ReactNode }) {
     }
   }, [child, progress, transition, app.sheetProgress])
 
+  // Only the params the parent's routes validate (see goBack). TanStack keeps
+  // that per match as `_strictSearch`; if it ever goes away, the root still
+  // keeps ?v=.
+  const parentSearch = (current as { _strictSearch?: object })._strictSearch ?? {}
+
   const goBack = useCallback(() => {
     const parent = current.pathname
     if (router.history.canGoBack() && app.previousPathname() === parent)
@@ -108,14 +113,12 @@ export function StackScreen({ children }: { children: ReactNode }) {
     else
       void router.navigate({
         to: parent,
-        // Keep only the params the parent's routes validate: Today keeps ?v=
-        // but not Detail's ?task=, while Detail keeps ?task= when a sheet on
-        // top of it closes. `_strictSearch` is TanStack's per-match record of
-        // exactly those; if it ever goes away, the root still keeps ?v=.
-        search: (current as { _strictSearch?: object })._strictSearch ?? {},
+        // Today keeps ?v= but not Detail's ?task=; Detail keeps ?task= when
+        // a sheet on top of it closes.
+        search: parentSearch,
         replace: true,
       } as never)
-  }, [router, current.pathname, app])
+  }, [router, current.pathname, parentSearch, app])
 
   const layer = child && (
     <Layer
