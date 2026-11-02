@@ -1,0 +1,54 @@
+name: Bug report
+description: Something in Protoling doesn't work as it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time. For security problems, please email the address in SECURITY.md instead of opening an issue.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: Steps, or better, a minimal route file. A link like `/p/orbit/play/today?v=…` helps too.
+      placeholder: |
+        1. bun run dev
+        2. Open /p/orbit/play/today
+        3. …
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does it happen?
+      multiple: true
+      options:
+        - Play view
+        - Board
+        - Inspector or handoff code
+        - On a real phone
+        - Navigation (push, sheet, tabs, back)
+        - Motion or variants
+        - bun run snap
+        - Install, dev server or build
+        - Something else
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Protoling commit or version, Bun version, OS, and browser or phone model.
+      placeholder: "main @ abc1234, Bun 1.4.2, macOS 26, Chrome 140 / iPhone 17 Pro, Safari"
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Screenshots, `bun run snap` output, console errors.

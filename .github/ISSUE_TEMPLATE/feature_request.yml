@@ -1,0 +1,28 @@
+name: Feature request
+description: An idea that would make prototyping with Protoling better.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: interaction
+    attributes:
+      label: What are you trying to prototype?
+      description: Describe the interaction or flow, and where Protoling gets in the way today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would help?
+      description: How you'd like it to work. Code sketches of the route file you'd want to write are very welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+  - type: checkboxes
+    id: fit
+    attributes:
+      label: Fit
+      options:
+        - label: This can be done in code, without a UI editor (Protoling is code-first).
