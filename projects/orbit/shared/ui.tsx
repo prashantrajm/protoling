@@ -109,28 +109,41 @@ export function Checkbox({
   )
 }
 
-const tabs = [
+export const tabItems = [
   { id: 'today', label: 'Today', icon: CalendarCheck },
   { id: 'search', label: 'Search', icon: Search },
   { id: 'inbox', label: 'Inbox', icon: Inbox },
   { id: 'me', label: 'Me', icon: User },
-]
+] as const
 
-export function TabBar({ active = 'today' }: { active?: string }) {
+export type TabId = (typeof tabItems)[number]['id']
+
+export function TabBar({
+  active,
+  onSelect,
+}: {
+  active: TabId | undefined
+  onSelect: (id: TabId) => void
+}) {
   return (
     <nav
-      className="absolute inset-x-0 bottom-0 flex justify-around border-t bg-white/90 pt-2 backdrop-blur"
+      aria-label="Tab bar"
+      className="relative z-20 flex justify-around border-t bg-white/90 pt-2 backdrop-blur"
       style={{ borderColor: orbit.line, paddingBottom: 'max(var(--safe-bottom), 8px)' }}
     >
-      {tabs.map(({ id, label, icon: Icon }) => (
-        <span
+      {tabItems.map(({ id, label, icon: Icon }) => (
+        <button
           key={id}
+          type="button"
+          aria-current={id === active ? 'page' : undefined}
+          data-tab={id}
+          onClick={() => onSelect(id)}
           className="flex w-16 flex-col items-center gap-1 text-[10px] font-medium"
           style={{ color: id === active ? orbit.accent : orbit.muted }}
         >
           <Icon className="size-[22px]" strokeWidth={id === active ? 2.2 : 1.8} />
           {label}
-        </span>
+        </button>
       ))}
     </nav>
   )
