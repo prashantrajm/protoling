@@ -1,10 +1,11 @@
-import { Check, LogOut, X } from 'lucide-react'
+import { Check, LogOut, RotateCcw, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
 
 /**
  * The hidden menu on a real phone (concept 08): variants of the screen on
- * top, and Exit preview. Shown by a three-finger tap or ⌘/Ctrl + .
+ * top, and Exit preview (or Restart in a share build). Shown by a
+ * three-finger tap or ⌘/Ctrl + .
  */
 export function PhoneMenu({
   open,
@@ -13,7 +14,9 @@ export function PhoneMenu({
   variantId,
   onVariant,
   onClose,
-  onExit,
+  action,
+  onAction,
+  hint,
 }: {
   open: boolean
   title: string
@@ -21,7 +24,10 @@ export function PhoneMenu({
   variantId: string
   onVariant: (id: string) => void
   onClose: () => void
-  onExit: () => void
+  /** "exit" leaves for Protoling's tooling; "restart" goes back to the app's start. */
+  action: 'exit' | 'restart'
+  onAction: () => void
+  hint: string
 }) {
   const panel = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -84,15 +90,22 @@ export function PhoneMenu({
           <div className="mt-2 border-t border-black/5">
             <button
               type="button"
-              onClick={onExit}
+              onClick={onAction}
               className="flex w-full items-center gap-3 px-4 py-3.5 text-left text-[16px] active:bg-black/5"
             >
-              <LogOut className="size-5" />
-              Exit preview
+              {action === 'exit' ? (
+                <>
+                  <LogOut className="size-5" />
+                  Exit preview
+                </>
+              ) : (
+                <>
+                  <RotateCcw className="size-5" />
+                  Restart
+                </>
+              )}
             </button>
-            <p className="px-4 pb-4 text-[13px] text-neutral-400">
-              Three-finger tap to hide
-            </p>
+            <p className="px-4 pb-4 text-[13px] text-neutral-400">{hint}</p>
           </div>
         </motion.div>
       )}

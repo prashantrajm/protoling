@@ -14,6 +14,7 @@
     "dev": "vite",
     "dev:phone": "vite --host",
     "build": "tsc --noEmit && vite build",
+    "build:share": "tsc --noEmit && PROTOLING_MODE=share vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "biome check .",
