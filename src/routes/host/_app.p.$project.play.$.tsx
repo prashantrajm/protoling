@@ -70,12 +70,12 @@ function PlayPage() {
   }, [])
 
   useEffect(() => {
-    if (ready) send({ type: 'sb:settings', timeScale, device: deviceId })
+    if (ready) send({ type: 'pl:settings', timeScale, device: deviceId })
   }, [ready, send, timeScale, deviceId])
 
   const firstTick = useRef(replayTick)
   useEffect(() => {
-    if (replayTick !== firstTick.current) send({ type: 'sb:replay' })
+    if (replayTick !== firstTick.current) send({ type: 'pl:replay' })
   }, [replayTick, send])
 
   const backToProject = useCallback(
@@ -83,7 +83,7 @@ function PlayPage() {
     [navigate, project],
   )
   const chooseVariant = useCallback(
-    (id: string) => screen && send({ type: 'sb:variant', key: screen.key, id }),
+    (id: string) => screen && send({ type: 'pl:variant', key: screen.key, id }),
     [screen, send],
   )
 
@@ -91,8 +91,8 @@ function PlayPage() {
     const onMessage = (event: MessageEvent) => {
       const message = readMessage<FromApp>(event)
       if (!message) return
-      if (message.type === 'sb:ready') setReady(true)
-      if (message.type === 'sb:state') {
+      if (message.type === 'pl:ready') setReady(true)
+      if (message.type === 'pl:state') {
         setScreen(message.screen)
         // Mirror the app's location in the page URL, so it can be shared.
         const url = new URL(message.href, window.location.origin)
@@ -106,7 +106,7 @@ function PlayPage() {
           })
         }
       }
-      if (message.type === 'sb:key') {
+      if (message.type === 'pl:key') {
         const { key } = message
         if (key === 'r') replayAll()
         else if (key === 's') toggleSlowMotion()

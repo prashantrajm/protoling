@@ -22,7 +22,7 @@ describe('discoverProjects', () => {
     expect(discoverProjects(root)).toEqual(['alpha', 'orbit'])
   })
 
-  it('rejects names reserved by Springboard', () => {
+  it('rejects names reserved by Protoling', () => {
     root = mkdtempSync(path.join(tmpdir(), 'sb-'))
     project('p')
     expect(() => discoverProjects(root)).toThrow(/reserved/)

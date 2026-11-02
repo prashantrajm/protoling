@@ -172,42 +172,43 @@ body {
   }
 }
 
-/* Screens: system font like a real phone, and CSS animations pause with the frame. */
-.sb-screen {
+/* Every mini app: the phone's system font, and CSS animations pause with
+   the frame when it's shown as a still. */
+.pl-app {
   font-family:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui,
     sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 
-.sb-screen[data-paused] *,
-.sb-screen[data-paused] *::before,
-.sb-screen[data-paused] *::after {
+.pl-app[data-paused] *,
+.pl-app[data-paused] *::before,
+.pl-app[data-paused] *::after {
   /* biome-ignore lint/complexity/noImportantStyles: must beat any animation set by a screen */
   animation-play-state: paused !important;
 }
 
 /* Shiki dual themes: colours come from CSS variables so the theme switch is instant. */
-.sb-code pre {
+.pl-code pre {
   /* biome-ignore lint/complexity/noImportantStyles: Shiki sets an inline background */
   background: transparent !important;
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
 }
-.sb-code span {
+.pl-code span {
   color: var(--shiki-light);
 }
-.dark .sb-code span {
+.dark .pl-code span {
   color: var(--shiki-dark);
 }
 
-/* Dotted canvas surface, matching React Flow's background on the canvas page. */
-.sb-dots {
+/* Dotted surface behind thumbnails, matching React Flow's background on boards. */
+.pl-dots {
   background-image: radial-gradient(var(--canvas-dot) 1px, transparent 1px);
   background-size: 16px 16px;
 }
 
-/* Canvas: connectors attach at frame edges without visible handles. */
-.react-flow .sb-handle {
+/* Boards: arrows attach at frame edges without visible handles. */
+.react-flow .pl-handle {
   opacity: 0;
   pointer-events: none;
   width: 1px;
@@ -217,31 +218,14 @@ body {
   border: 0;
 }
 
-/* A connector flashes along its length after a screen navigates through it. */
-.sb-edge-flow {
-  stroke-dasharray: 6 6;
-  animation: sb-edge-flow 0.6s linear infinite;
-}
-@keyframes sb-edge-flow {
-  to {
-    stroke-dashoffset: -12;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .sb-edge-flow {
-    animation: none;
-  }
-}
-
 .react-flow__node-frame {
   cursor: default;
 }
 
-/* Embedded and phone previews: the prototype owns the whole viewport. */
-html.sb-embed,
-html.sb-embed body,
-html.sb-play,
-html.sb-play body {
+/* When a mini app owns the whole page (on a phone, or in the play iframe),
+   it gets the viewport to itself: no page scroll, overscroll or selection. */
+html.pl-standalone,
+html.pl-standalone body {
   overflow: hidden;
   overscroll-behavior: none;
   background: #000;

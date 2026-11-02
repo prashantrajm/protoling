@@ -100,6 +100,13 @@ export function MiniAppHost({
   )
 
   const screen = useTopScreen(project)
+
+  // On a phone or in the play iframe, the app owns the whole page.
+  useEffect(() => {
+    if (mode === 'frame') return
+    document.documentElement.classList.add('pl-standalone')
+    return () => document.documentElement.classList.remove('pl-standalone')
+  }, [mode])
   const onDevice = mode === 'device'
   const style = {
     '--safe-top': onDevice ? 'env(safe-area-inset-top)' : `${device.safeArea.top}px`,
@@ -115,7 +122,7 @@ export function MiniAppHost({
   return (
     <MiniAppContext value={context}>
       <div
-        className="sb-app relative isolate h-full w-full overflow-hidden bg-black text-left text-neutral-900"
+        className="pl-app relative isolate h-full w-full overflow-hidden bg-black text-left text-neutral-900"
         style={style}
         data-paused={playing ? undefined : ''}
       >
@@ -195,28 +202,28 @@ function IframeBridge({
   const href = useRouterState({ select: (s) => s.location.href })
 
   useEffect(() => {
-    post({ type: 'sb:state', href, screen })
+    post({ type: 'pl:state', href, screen })
   }, [href, screen])
 
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
       const message = readMessage<ToApp>(event)
       if (!message) return
-      if (message.type === 'sb:settings')
+      if (message.type === 'pl:settings')
         onSettings({ timeScale: message.timeScale, device: message.device })
-      if (message.type === 'sb:replay') onReplay()
-      if (message.type === 'sb:variant') setVariantInUrl(router, message.key, message.id)
+      if (message.type === 'pl:replay') onReplay()
+      if (message.type === 'pl:variant') setVariantInUrl(router, message.key, message.id)
     }
     const onKey = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement
       if (target.closest('input, textarea, select, [contenteditable]')) return
       if (event.metaKey || event.ctrlKey || event.altKey) return
       const key = event.key.toLowerCase()
-      if (forwardedKeys.has(key)) post({ type: 'sb:key', key })
+      if (forwardedKeys.has(key)) post({ type: 'pl:key', key })
     }
     window.addEventListener('message', onMessage)
     window.addEventListener('keydown', onKey)
-    post({ type: 'sb:ready' })
+    post({ type: 'pl:ready' })
     return () => {
       window.removeEventListener('message', onMessage)
       window.removeEventListener('keydown', onKey)
@@ -239,7 +246,6 @@ function DeviceMenu({ project, screen }: { project: string; screen: TopScreen })
   }, [router, project])
 
   useEffect(() => {
-    document.documentElement.classList.add('sb-device')
     const onKey = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key === '.') {
         event.preventDefault()
@@ -251,7 +257,6 @@ function DeviceMenu({ project, screen }: { project: string; screen: TopScreen })
     }
     window.addEventListener('keydown', onKey)
     return () => {
-      document.documentElement.classList.remove('sb-device')
       window.removeEventListener('keydown', onKey)
     }
   }, [exit])

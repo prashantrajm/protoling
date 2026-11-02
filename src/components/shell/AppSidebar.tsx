@@ -22,8 +22,20 @@ export function AppSidebar() {
 
   return (
     <aside className="flex w-[264px] shrink-0 flex-col border-r bg-sidebar">
-      <Link to="/" className="px-7 pb-6 pt-7 text-[22px] font-semibold tracking-tight">
-        Springboard
+      <Link
+        to="/"
+        className="flex items-center gap-2.5 px-7 pb-6 pt-7 text-[22px] font-semibold tracking-tight"
+      >
+        {/* The app icon as a rounded tile: its own background keeps the
+            white cursor visible on the light sidebar too. */}
+        <img
+          src="/brand/protoling-icon.png"
+          alt=""
+          width={32}
+          height={32}
+          className="size-8 shrink-0"
+        />
+        Protoling
       </Link>
 
       <div className="px-7 pb-2">

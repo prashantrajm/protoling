@@ -46,7 +46,7 @@ export function Thumbnail({
     <div
       ref={ref}
       inert
-      className="sb-dots pointer-events-none absolute inset-0 flex items-center justify-center bg-canvas"
+      className="pl-dots pointer-events-none absolute inset-0 flex items-center justify-center bg-canvas"
       style={{ gap: gap * scale }}
     >
       {scale > 0 &&

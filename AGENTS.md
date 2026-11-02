@@ -1,6 +1,6 @@
-# Working on Springboard prototypes
+# Working on Protoling prototypes
 
-Springboard prototypes are small mobile apps written as React + TanStack Router file routes. You write them in code; the web UI is for playing them, comparing variants and handing motion off to engineers.
+Protoling prototypes are small mobile apps written as React + TanStack Router file routes. You write them in code; the web UI is for playing them, comparing variants and handing motion off to engineers.
 
 ## Where things go
 
@@ -75,7 +75,7 @@ The `createFileRoute('…')` path is filled in by the router generator. Paths in
 
 - Screens fill their container: use `h-full`, flex, and container units (`cqw`, `cqh`). Never use `vh`, `vw` or viewport media queries: on a board the "viewport" is a frame, not the window.
 - Use `var(--safe-top)`, `var(--safe-bottom)` (and left/right) for insets.
-- Prototype colours are independent of Springboard's theme. Don't use Springboard's CSS variables (`--brand`, `--background`, …) in a project.
+- Prototype colours are independent of Protoling's theme. Don't use Protoling's CSS variables (`--brand`, `--background`, …) in a project.
 
 ## Check your work
 

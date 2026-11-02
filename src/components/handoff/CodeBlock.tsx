@@ -77,7 +77,7 @@ export function CodeBlock({
       </Button>
       {html ? (
         <div
-          className="sb-code overflow-x-auto p-3 text-[12px] leading-[1.55]"
+          className="pl-code overflow-x-auto p-3 text-[12px] leading-[1.55]"
           // Shiki output is generated from our own strings, not user HTML.
           // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted highlighter output
           dangerouslySetInnerHTML={{ __html: html }}

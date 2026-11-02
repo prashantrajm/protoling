@@ -6,7 +6,7 @@
  *   bun run snap "orbit/today/detail?task=sprint" orbit/me --device iphone-se
  *   bun run snap orbit/today --frames 6     # a strip of frames, every 100ms
  *
- * Starts Springboard's dev server, opens each URL in the play view and
+ * Starts Protoling's dev server, opens each URL in the play view and
  * captures the phone, status bar included. Uses your installed Google Chrome
  * through playwright-core; no browser download.
  */

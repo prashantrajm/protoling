@@ -17,19 +17,19 @@ export interface ScreenSnapshot {
 }
 
 export type ToApp =
-  | { type: 'sb:settings'; timeScale: number; device: string }
-  | { type: 'sb:replay' }
-  | { type: 'sb:variant'; key: string; id: string }
+  | { type: 'pl:settings'; timeScale: number; device: string }
+  | { type: 'pl:replay' }
+  | { type: 'pl:variant'; key: string; id: string }
 
 export type FromApp =
-  | { type: 'sb:ready' }
-  | { type: 'sb:state'; href: string; screen: ScreenSnapshot | null }
-  | { type: 'sb:key'; key: string }
+  | { type: 'pl:ready' }
+  | { type: 'pl:state'; href: string; screen: ScreenSnapshot | null }
+  | { type: 'pl:key'; key: string }
 
 export function readMessage<T extends { type: string }>(event: MessageEvent): T | null {
   if (event.origin !== window.location.origin) return null
   const data = event.data as { type?: unknown } | null
-  return typeof data?.type === 'string' && data.type.startsWith('sb:')
+  return typeof data?.type === 'string' && data.type.startsWith('pl:')
     ? (data as T)
     : null
 }

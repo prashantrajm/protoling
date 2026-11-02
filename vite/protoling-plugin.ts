@@ -10,11 +10,11 @@ import { discoverProjects } from './projects.ts'
  * a restart when a project is added or removed, because projects are mounted
  * into the route tree when the server starts.
  *
- * Springboard never writes your files: prototypes are code you write.
+ * Protoling never writes your files: prototypes are code you write.
  */
-export function springboard({ projects }: { projects: string[] }): Plugin {
+export function protoling({ projects }: { projects: string[] }): Plugin {
   return {
-    name: 'springboard',
+    name: 'protoling',
     apply: 'serve',
     configureServer(server) {
       const root = server.config.root
@@ -30,7 +30,7 @@ export function springboard({ projects }: { projects: string[] }): Plugin {
           return
         }
         if (next !== known) {
-          server.config.logger.info('[springboard] Projects changed, restarting…')
+          server.config.logger.info('[protoling] Projects changed, restarting…')
           void server.restart()
         }
       }
@@ -39,7 +39,7 @@ export function springboard({ projects }: { projects: string[] }): Plugin {
       server.watcher.on('unlinkDir', maybeRestart)
 
       server.middlewares.use(async (req, res, next) => {
-        if (req.url?.split('?')[0] !== '/__springboard/meta') return next()
+        if (req.url?.split('?')[0] !== '/__protoling/meta') return next()
         try {
           send(res, 200, {
             updatedAt: await projectTimestamps(root, projects),

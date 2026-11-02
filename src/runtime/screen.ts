@@ -94,7 +94,7 @@ export function useMotion(key: string): Transition {
   const token = screen?.tokens[key]
   if (!token && import.meta.env.DEV) {
     console.warn(
-      `[springboard] Unknown motion token "${key}". Declare it in staticData.screen.motion of this route or a parent.`,
+      `[protoling] Unknown motion token "${key}". Declare it in staticData.screen.motion of this route or a parent.`,
     )
   }
   return useMemo(() => toTransition(token ?? fallback, timeScale), [token, timeScale])

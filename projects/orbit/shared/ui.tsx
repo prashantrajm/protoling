@@ -3,7 +3,7 @@ import { motion, type Transition } from 'motion/react'
 
 /**
  * Orbit's own design system. Prototype colours are independent of
- * Springboard's UI, so this violet is Orbit's, not the platform accent.
+ * Protoling's UI, so this violet is Orbit's, not the platform accent.
  */
 export const orbit = {
   accent: '#7b61ff',

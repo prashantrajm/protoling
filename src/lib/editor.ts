@@ -7,7 +7,7 @@ import { create } from 'zustand'
 
 export type Theme = 'light' | 'dark' | 'system'
 
-const themeKey = 'springboard:theme'
+const themeKey = 'protoling:theme'
 /** How much slower slow motion runs. */
 export const slowMotionFactor = 4
 

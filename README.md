@@ -1,20 +1,22 @@
-# Springboard
+<img src="public/brand/protoling-icon.png" alt="Protoling: a cursor taking flight" width="128" height="128" />
+
+# Protoling
 
 **Prototype mobile apps — screens, navigation and motion — in code.**
 
-Springboard is an open-source starter for prototyping how a mobile app _works and moves_. Each prototype is a small app made of React screens and [TanStack Router](https://tanstack.com/router) routes, animated with [Motion](https://motion.dev). Springboard runs it on a phone frame at real device size, lets you tap through the whole app, compare animation variants side by side, open it full screen on your phone, and turn every timing into SwiftUI and Jetpack Compose code.
+Protoling is an open-source starter for prototyping how a mobile app _works and moves_. Each prototype is a small app made of React screens and [TanStack Router](https://tanstack.com/router) routes, animated with [Motion](https://motion.dev). Protoling runs it on a phone frame at real device size, lets you tap through the whole app, compare animation variants side by side, open it full screen on your phone, and turn every timing into SwiftUI and Jetpack Compose code.
 
 > **Status:** early development. Expect breaking changes.
 
-![Springboard's play view: the Orbit example app running on an iPhone 17 Pro frame, with the inspector showing the Detail screen's push transition and its spring physics](docs/screenshots/play.png)
+![Protoling's play view: the Orbit example app running on an iPhone 17 Pro frame, with the inspector showing the Detail screen's push transition and its spring physics](docs/screenshots/play.png)
 
 ---
 
-## Why Springboard
+## Why Protoling
 
 Once the static design is done, the hardest part is still ahead: defining how the app behaves and moves. Building realistic interactions by dragging layers in a design tool is slow. In code, and especially with coding agents, it's fast.
 
-So Springboard is **code-first**. You (or your agent) write the app. Springboard plays it, shows it, and hands it off. The goal is clear communication between design and engineering: show mobile developers exactly how an interaction looks and feels, with the values they need to rebuild it natively.
+So Protoling is **code-first**. You (or your agent) write the app. Protoling plays it, shows it, and hands it off. The goal is clear communication between design and engineering: show mobile developers exactly how an interaction looks and feels, with the values they need to rebuild it natively.
 
 It runs entirely on your machine. There's no hosted version, no account and no database.
 
@@ -57,7 +59,7 @@ projects/my-app/
   shared/                   components and data your screens share
 ```
 
-Each project is a mini app inside Springboard. Its routes are ordinary TanStack Router files, so links and params are type-checked, and tools and agents that know TanStack already know how to write them.
+Each project is a mini app inside Protoling. Its routes are ordinary TanStack Router files, so links and params are type-checked, and tools and agents that know TanStack already know how to write them.
 
 ### A screen
 
@@ -103,7 +105,7 @@ function Home() {
 
 ### Native-style navigation, from plain routes
 
-Springboard doesn't ship a navigation library. A few pieces make TanStack routes behave like a native app:
+Protoling doesn't ship a navigation library. A few pieces make TanStack routes behave like a native app:
 
 | You write | You get |
 | --- | --- |
@@ -150,7 +152,7 @@ Every project also gets an **All screens** board, with arrows taken from its rou
 
 ![The Orbit project page in dark mode, with live previews of the app and its boards](docs/screenshots/project-dark.png)
 
-## Using Springboard
+## Using Protoling
 
 | Surface | What it's for |
 | --- | --- |
@@ -183,7 +185,7 @@ bun run snap my-app/home --frames 6                  # a strip of an animation
 bun run snap my-app/home --device iphone-se
 ```
 
-`snap` starts Springboard, renders each URL on a phone frame with your installed Chrome, and fails if the page throws.
+`snap` starts Protoling, renders each URL on a phone frame with your installed Chrome, and fails if the page throws.
 
 ## Handoff
 
@@ -202,7 +204,7 @@ Tweens export as cubic Béziers. Motion's `circ`, `backInOut` and `anticipate` e
 
 | Command | Description |
 | --- | --- |
-| `bun run dev` | Start Springboard at localhost:3000 |
+| `bun run dev` | Start Protoling at localhost:3000 |
 | `bun run dev:phone` | Same, reachable from other devices on your network |
 | `bun run snap <urls>` | Render app states to PNGs |
 | `bun run build` | Typecheck and build a static copy of every project |
@@ -224,7 +226,7 @@ src/
   components/app/      the host around every mini app: device, safe areas, phone menu
   components/          play, boards, inspector, shell, ui (shadcn)
   lib/                 devices, motion maths, handoff, boards, workspace
-  routes/host/         Springboard's own pages
+  routes/host/         Protoling's own pages
 scripts/snap.ts        render app states to PNGs
 docs/screenshots/      images used in this README
 vite/                  project discovery and the read-only dev endpoint

@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { MotionCurve } from './MotionCurve'
 
 /**
- * Read-only: everything shown comes from the route's code. Springboard is
+ * Read-only: everything shown comes from the route's code. Protoling is
  * code-first, so the inspector explains and exports motion rather than
  * editing it.
  */

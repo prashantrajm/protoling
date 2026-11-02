@@ -3,7 +3,7 @@ import path from 'node:path'
 
 /**
  * Projects that have an app/ folder. Each one is mounted as a mini app at
- * /<project>, so its name must not collide with Springboard's own routes or
+ * /<project>, so its name must not collide with Protoling's own routes or
  * with paths the dev server serves.
  */
 export const reservedNames = new Set([
@@ -13,7 +13,7 @@ export const reservedNames = new Set([
   'projects',
   'public',
   'node_modules',
-  '__springboard',
+  '__protoling',
 ])
 
 const slug = /^[a-z0-9][a-z0-9-]*$/
@@ -26,12 +26,12 @@ export function discoverProjects(root: string): string[] {
     .map((name) => {
       if (!slug.test(name)) {
         throw new Error(
-          `[springboard] Project folder "${name}" must be lowercase letters, digits and dashes.`,
+          `[protoling] Project folder "${name}" must be lowercase letters, digits and dashes.`,
         )
       }
       if (reservedNames.has(name)) {
         throw new Error(
-          `[springboard] "${name}" is reserved by Springboard. Rename projects/${name}.`,
+          `[protoling] "${name}" is reserved by Protoling. Rename projects/${name}.`,
         )
       }
       return name

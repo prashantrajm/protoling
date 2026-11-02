@@ -1,5 +1,5 @@
 /**
- * Everything a project's routes need from Springboard. Routes are plain
+ * Everything a project's routes need from Protoling. Routes are plain
  * TanStack Router files; this adds native-style presentation, motion tokens
  * and variants on top.
  */

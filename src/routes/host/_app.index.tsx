@@ -27,7 +27,7 @@ function Empty() {
     home.tsx            a screen, at /my-app/home`}
         </pre>
         <p className="mt-4 text-sm text-muted-foreground">
-          Springboard picks it up straight away. See the README and AGENTS.md for the
+          Protoling picks it up straight away. See the README and AGENTS.md for the
           details.
         </p>
       </div>

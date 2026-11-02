@@ -106,13 +106,13 @@ export const FrameNode = memo(function FrameNode({ data }: NodeProps<FrameNodeTy
         type="target"
         position={Position.Left}
         isConnectable={false}
-        className="sb-handle"
+        className="pl-handle"
       />
       <Handle
         type="source"
         position={Position.Right}
         isConnectable={false}
-        className="sb-handle"
+        className="pl-handle"
       />
     </div>
   )

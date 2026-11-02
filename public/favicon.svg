@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#8b5cf6"/><rect x="10" y="6" width="12" height="20" rx="3" fill="none" stroke="#fff" stroke-width="2"/><path d="M12 21c2.5-1 5.5-4 8-9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1254 1254">
+  <title>Protoling</title>
+  <rect width="1254" height="1254" rx="280" fill="#4a48f4"/>
+  <g transform="translate(627 627) scale(0.86) translate(-661 -626)">
+    <path d="M218 362 L600 450 L912 850 L828 924 L800 1022 L602 918 L422 998 Z" fill="#fff" stroke="#fff" stroke-width="92" stroke-linejoin="round"/>
+    <path d="M482 636 C690 540 930 412 1100 394 C1152 389 1152 442 1136 482 C1082 602 972 690 842 716 Z" fill="#f6b4aa"/>
+    <path d="M470 632 C640 500 862 330 1040 292 C1092 281 1102 332 1090 372 C1052 502 952 642 830 700 Z" fill="#a19ffb"/>
+    <path d="M450 628 C560 470 762 222 930 190 C986 180 992 250 974 300 C930 430 870 580 800 672 C760 705 700 702 640 688 C580 672 510 650 450 628 Z" fill="#b8abf9"/>
+    <path d="M450 628 C620 596 780 566 884 500 C856 580 830 636 800 672 C760 705 700 702 640 688 C580 672 510 650 450 628 Z" fill="#8a7bf6"/>
+    <rect x="300" y="404" width="44" height="80" rx="22" transform="rotate(32 322 444)" fill="#211d2e"/>
+    <rect x="366" y="446" width="40" height="70" rx="20" transform="rotate(32 386 481)" fill="#211d2e"/>
+  </g>
+</svg>
