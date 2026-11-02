@@ -1,3 +1,4 @@
+import config from 'virtual:protoling/config'
 import { useMatches, useRouter, useRouterState } from '@tanstack/react-router'
 import {
   LayoutGroup,
@@ -13,13 +14,15 @@ import {
   useContext,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from 'react'
 import { DeviceChrome } from '@/components/device/StatusBar'
 import { type FromApp, readMessage, type ScreenSnapshot, type ToApp } from '@/lib/bridge'
-import { getDevice } from '@/lib/devices'
+import { type Device, getDevice } from '@/lib/devices'
 import { topScreenSnapshot } from '@/lib/snapshot'
 import { useProjectEntry } from '@/lib/workspace/store'
 import {
@@ -46,7 +49,15 @@ export function MiniAppHost({
   const frame = useContext(FrameContext)
   const entry = useProjectEntry(project)
   const router = useRouter()
-  const mode: AppMode = frame ? 'frame' : window.parent !== window ? 'iframe' : 'device'
+  const wide = useWideViewport()
+  // Opened directly: edge to edge on a phone, in a phone frame on a desktop.
+  const mode: AppMode = frame
+    ? 'frame'
+    : window.parent !== window
+      ? 'iframe'
+      : wide
+        ? 'present'
+        : 'device'
 
   // Settings the play page sends into the iframe.
   const [remote, setRemote] = useState<{ timeScale: number; device?: string }>({
@@ -101,7 +112,7 @@ export function MiniAppHost({
 
   const screen = useTopScreen(project)
 
-  // On a phone or in the play iframe, the app owns the whole page.
+  // Opened directly or in the play iframe, the app owns the whole page.
   useEffect(() => {
     if (mode === 'frame') return
     document.documentElement.classList.add('pl-standalone')
@@ -119,44 +130,114 @@ export function MiniAppHost({
     '--safe-left': onDevice ? 'env(safe-area-inset-left)' : `${device.safeArea.left}px`,
   } as CSSProperties
 
+  const app = (
+    <div
+      className="pl-app relative isolate h-full w-full overflow-hidden bg-black text-left text-neutral-900"
+      style={style}
+      data-paused={playing ? undefined : ''}
+    >
+      <motion.div
+        className="absolute inset-0 origin-center overflow-hidden bg-white"
+        style={{ scale, borderRadius: radius }}
+      >
+        <MotionConfig reducedMotion="user" skipAnimations={!playing}>
+          {/* layoutId is page-wide in Motion. Several copies of an app share
+                a page on boards and thumbnails, so each gets its own scope. */}
+          <LayoutGroup id={layoutScope}>
+            <div key={replayKey} className="h-full">
+              {children}
+            </div>
+          </LayoutGroup>
+        </MotionConfig>
+      </motion.div>
+      <div
+        ref={setPortalTarget}
+        className="pointer-events-none absolute inset-0 z-[80] [&>*]:pointer-events-auto"
+      />
+      {!onDevice && (
+        <DeviceChrome device={device} tone={screen?.statusBar ?? 'dark'} statusBar />
+      )}
+      {mode === 'iframe' && (
+        <IframeBridge
+          screen={screen}
+          onSettings={setRemote}
+          onReplay={() => setReplay((r) => r + 1)}
+        />
+      )}
+      {(mode === 'device' || mode === 'present') && (
+        <DeviceMenu project={project} screen={screen} mode={mode} />
+      )}
+    </div>
+  )
+
   return (
     <MiniAppContext value={context}>
-      <div
-        className="pl-app relative isolate h-full w-full overflow-hidden bg-black text-left text-neutral-900"
-        style={style}
-        data-paused={playing ? undefined : ''}
-      >
-        <motion.div
-          className="absolute inset-0 origin-center overflow-hidden bg-white"
-          style={{ scale, borderRadius: radius }}
-        >
-          <MotionConfig reducedMotion="user" skipAnimations={!playing}>
-            {/* layoutId is page-wide in Motion. Several copies of an app share
-                a page on boards and thumbnails, so each gets its own scope. */}
-            <LayoutGroup id={layoutScope}>
-              <div key={replayKey} className="h-full">
-                {children}
-              </div>
-            </LayoutGroup>
-          </MotionConfig>
-        </motion.div>
-        <div
-          ref={setPortalTarget}
-          className="pointer-events-none absolute inset-0 z-[80] [&>*]:pointer-events-auto"
-        />
-        {!onDevice && (
-          <DeviceChrome device={device} tone={screen?.statusBar ?? 'dark'} statusBar />
-        )}
-        {mode === 'iframe' && (
-          <IframeBridge
-            screen={screen}
-            onSettings={setRemote}
-            onReplay={() => setReplay((r) => r + 1)}
-          />
-        )}
-        {onDevice && <DeviceMenu project={project} screen={screen} />}
-      </div>
+      {mode === 'present' ? (
+        <PresentationStage device={device}>{app}</PresentationStage>
+      ) : (
+        app
+      )}
     </MiniAppContext>
+  )
+}
+
+const wideQuery = '(min-width: 640px) and (min-height: 560px)'
+
+/** Big enough to show a phone in a frame, rather than filling the screen. */
+function useWideViewport(): boolean {
+  return useSyncExternalStore(
+    (onChange) => {
+      const query = window.matchMedia(wideQuery)
+      query.addEventListener('change', onChange)
+      return () => query.removeEventListener('change', onChange)
+    },
+    () => window.matchMedia(wideQuery).matches,
+  )
+}
+
+/**
+ * The app alone, centred at real device size and scaled down to fit when the
+ * window is short. What a client sees when you send them a link.
+ */
+function PresentationStage({
+  device,
+  children,
+}: {
+  device: Device
+  children: ReactNode
+}) {
+  const [scale, setScale] = useState(1)
+  useLayoutEffect(() => {
+    const fitToWindow = () =>
+      setScale(
+        Math.min(
+          1,
+          (window.innerHeight - 48) / device.height,
+          (window.innerWidth - 48) / device.width,
+        ),
+      )
+    fitToWindow()
+    window.addEventListener('resize', fitToWindow)
+    return () => window.removeEventListener('resize', fitToWindow)
+  }, [device])
+
+  return (
+    <div className="fixed inset-0 grid place-items-center bg-canvas" data-presenting>
+      <div style={{ width: device.width * scale, height: device.height * scale }}>
+        <div
+          className="origin-top-left overflow-hidden shadow-[0_0_0_1px_var(--frame-border),0_24px_60px_rgba(0,0,0,0.14)] [transform:translateZ(0)]"
+          style={{
+            width: device.width,
+            height: device.height,
+            borderRadius: device.radius,
+            containerType: 'size',
+            transform: `scale(${scale})`,
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -234,16 +315,29 @@ function IframeBridge({
 }
 
 /** On a real phone: hidden menu on three-finger tap or ⌘/Ctrl + . */
-function DeviceMenu({ project, screen }: { project: string; screen: TopScreen }) {
+function DeviceMenu({
+  project,
+  screen,
+  mode,
+}: {
+  project: string
+  screen: TopScreen
+  mode: 'device' | 'present'
+}) {
+  // A share build has no tooling to exit to, so the menu restarts the app.
+  const shared = config.mode === 'share'
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const openRef = useRef(open)
   openRef.current = open
   useThreeFingerTap(() => setOpen((o) => !o))
 
-  const exit = useCallback(() => {
-    void router.navigate({ to: '/p/$project', params: { project } } as never)
-  }, [router, project])
+  // Exit to Protoling's project page, or in a share build restart the app.
+  const leave = useCallback(() => {
+    setOpen(false)
+    if (shared) void router.navigate({ to: `/${project}`, replace: true } as never)
+    else void router.navigate({ to: '/p/$project', params: { project } } as never)
+  }, [router, project, shared])
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -251,15 +345,18 @@ function DeviceMenu({ project, screen }: { project: string; screen: TopScreen })
         event.preventDefault()
         setOpen((o) => !o)
       } else if (event.key === 'Escape') {
+        // Escape closes the menu first; it only exits when there's tooling to exit to.
         if (openRef.current) setOpen(false)
-        else exit()
+        else if (!shared) leave()
       }
     }
     window.addEventListener('keydown', onKey)
     return () => {
       window.removeEventListener('keydown', onKey)
     }
-  }, [exit])
+  }, [leave, shared])
+
+  const mac = /Mac|iPhone|iPad/.test(navigator.platform)
 
   return (
     <PhoneMenu
@@ -269,7 +366,13 @@ function DeviceMenu({ project, screen }: { project: string; screen: TopScreen })
       variantId={screen?.variantId ?? 'default'}
       onVariant={(id) => screen && setVariantInUrl(router, screen.key, id)}
       onClose={() => setOpen(false)}
-      onExit={exit}
+      action={shared ? 'restart' : 'exit'}
+      onAction={leave}
+      hint={
+        mode === 'present'
+          ? `${mac ? '⌘' : 'Ctrl'} . to hide`
+          : 'Three-finger tap to hide'
+      }
     />
   )
 }

@@ -12,3 +12,4 @@ dist-ssr
 __unconfig*
 todos.json
 snaps
+src/routeTree.share.gen.ts

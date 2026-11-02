@@ -152,6 +152,41 @@ Every project also gets an **All screens** board, with arrows taken from its rou
 
 ![The Orbit project page in dark mode, with live previews of the app and its boards](docs/screenshots/project-dark.png)
 
+## Sharing a prototype
+
+Any app URL opened on its own, like `/orbit/today`, shows **just the app**: alone in a phone frame on a desktop browser, and edge to edge on a phone. That's the link to send.
+
+To send it to a client or teammate, deploy a **share build**. It contains only the prototypes, with none of Protoling's tooling: no sidebar, boards, inspector or handoff code, and no other projects.
+
+1. Choose what to share in `protoling.config.ts`:
+
+   ```ts
+   export default defineConfig({
+     share: {
+       projects: ['orbit'],       // leave out to include every project
+       start: '/orbit/welcome',   // where the site's root URL goes
+     },
+   })
+   ```
+
+2. Build it:
+
+   ```bash
+   bun run build:share   # writes dist/
+   bun run preview       # optional: try it locally
+   ```
+
+In a share build, the root URL and anything outside the shared projects go to `start`, and the hidden menu (three-finger tap, or ⌘ . on a desktop) offers **Restart** instead of Exit preview. Links keep their screen and variant (`?v=…`), so you can send exactly the version you want feedback on.
+
+### Deploying
+
+The build is a static site. Hosts must serve `index.html` for every path, so deep links like `/orbit/today/detail` still work after a refresh.
+
+- **Vercel:** import the repository and set the build command to `bun run build:share` and the output directory to `dist`. The included `vercel.json` handles deep links.
+- **Cloudflare Pages:** set the build command to `bun run build:share` and the output directory to `dist`. Pages treats a site without a `404.html` as a single-page app, so deep links work as they are. You can also build locally and upload with `bunx wrangler pages deploy dist`.
+
+A deployed share build is public to anyone with the link. For confidential work, turn on your host's access protection, such as Vercel's password protection or Cloudflare Access.
+
 ## Using Protoling
 
 | Surface | What it's for |
@@ -207,7 +242,8 @@ Tweens export as cubic Béziers. Motion's `circ`, `backInOut` and `anticipate` e
 | `bun run dev` | Start Protoling at localhost:3000 |
 | `bun run dev:phone` | Same, reachable from other devices on your network |
 | `bun run snap <urls>` | Render app states to PNGs |
-| `bun run build` | Typecheck and build a static copy of every project |
+| `bun run build` | Typecheck and build a static copy of everything, tooling included |
+| `bun run build:share` | Build only the prototypes, for sharing (see [Sharing a prototype](#sharing-a-prototype)) |
 | `bun run preview` | Serve that build locally |
 | `bun run test` | Unit tests (Vitest) |
 | `bun run lint` | Lint and check formatting (Biome) |
@@ -228,6 +264,7 @@ src/
   lib/                 devices, motion maths, handoff, boards, workspace
   routes/host/         Protoling's own pages
 scripts/snap.ts        render app states to PNGs
+protoling.config.ts    what a share build includes
 docs/screenshots/      images used in this README
 vite/                  project discovery and the read-only dev endpoint
 ```

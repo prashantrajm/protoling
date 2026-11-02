@@ -23,6 +23,6 @@ Protoling is a local development tool: it runs on your machine through Vite's de
 
 - **`bun run dev:phone` exposes the dev server on your local network** so a phone can open prototypes. Anyone on that network can then view your prototypes. Only use it on networks you trust. Protoling's own dev endpoint is read-only, and it never writes to your files.
 - **Prototypes are code.** Opening someone else's project runs their code in your browser and their route files through Vite on your machine. Treat a project from an untrusted source like any untrusted code.
-- **Static builds** (`bun run build`) contain every project in `projects/`. Don't host a build publicly if your prototypes are confidential.
+- **Builds are static sites.** `bun run build` contains every project and all of Protoling's tooling. `bun run build:share` contains only the projects listed in `protoling.config.ts`. Anyone with the link to a deployed build can use it, so put confidential work behind your host's access protection.
 
 Reports about these behaviours are welcome if you find a way they can be abused beyond what's described here. Vulnerabilities in dependencies such as Vite or React should go to those projects, though we're glad to hear about any that affect Protoling.

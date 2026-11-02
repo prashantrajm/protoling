@@ -4,8 +4,10 @@ import type { Device } from '@/lib/devices'
 
 /** Where the mini app is running. */
 export type AppMode =
-  /** Opened directly, e.g. on a phone: real viewport, real safe areas. */
+  /** Opened directly on a phone-sized screen: real viewport, real safe areas. */
   | 'device'
+  /** Opened directly in a desktop browser: shown alone in a phone frame. */
+  | 'present'
   /** In the desktop play view's iframe, at exact device size. */
   | 'iframe'
   /** One of several frames on a board or thumbnail, in the same page. */

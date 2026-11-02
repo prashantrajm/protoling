@@ -1,6 +1,8 @@
+import config from 'virtual:protoling/config'
 import {
   createRootRoute,
   Outlet,
+  redirect,
   retainSearchParams,
   useLocation,
 } from '@tanstack/react-router'
@@ -14,6 +16,14 @@ export const Route = createRootRoute({
     v: typeof search.v === 'string' && search.v ? search.v : undefined,
   }),
   search: { middlewares: [retainSearchParams(['v'])] },
+  // A share build has nothing but the prototypes: the root and any URL
+  // outside them go to the start screen.
+  beforeLoad: ({ location }) => {
+    if (config.mode !== 'share') return
+    if (!config.projects.includes(location.pathname.split('/')[1])) {
+      throw redirect({ href: config.start, replace: true })
+    }
+  },
   component: Root,
   notFoundComponent: () => (
     <div className="grid h-full place-items-center text-sm text-muted-foreground">

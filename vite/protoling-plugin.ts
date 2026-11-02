@@ -2,20 +2,52 @@ import type { ServerResponse } from 'node:http'
 import { networkInterfaces } from 'node:os'
 import path from 'node:path'
 import type { Plugin, ViteDevServer } from 'vite'
+import { type BuildMode, narrowProjectGlobs } from './config.ts'
 import { projectTimestamps } from './project-files.ts'
 import { discoverProjects } from './projects.ts'
 
+const configModule = 'virtual:protoling/config'
+
 /**
- * Read-only dev endpoint (edit times and LAN URLs for "Open on phone"), plus
- * a restart when a project is added or removed, because projects are mounted
- * into the route tree when the server starts.
+ * - `virtual:protoling/config` tells the app the build mode, its projects and
+ *   where `/` goes.
+ * - In share builds, narrows `/projects/*` globs to the shared projects.
+ * - In dev: a read-only endpoint (edit times and LAN URLs for "Open on
+ *   phone"), and a restart when a project is added or removed, because
+ *   projects are mounted into the route tree when the server starts.
  *
  * Protoling never writes your files: prototypes are code you write.
  */
-export function protoling({ projects }: { projects: string[] }): Plugin {
+export function protoling({
+  mode,
+  projects,
+  start,
+}: {
+  mode: BuildMode
+  projects: string[]
+  start: string
+}): Plugin {
   return {
     name: 'protoling',
-    apply: 'serve',
+    // Before Vite expands import.meta.glob, so narrowing changes what's bundled.
+    enforce: 'pre',
+    resolveId(id) {
+      if (id === configModule) return `\0${configModule}`
+    },
+    load(id) {
+      if (id === `\0${configModule}`) {
+        return `export default ${JSON.stringify({ mode, projects, start })}`
+      }
+    },
+    transform(code, id) {
+      if (
+        mode !== 'share' ||
+        id.includes('node_modules') ||
+        !code.includes('/projects/*/')
+      )
+        return
+      return { code: narrowProjectGlobs(code, projects), map: null }
+    },
     configureServer(server) {
       const root = server.config.root
       const known = projects.join(',')
