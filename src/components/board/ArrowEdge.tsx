@@ -6,62 +6,45 @@ import {
   getBezierPath,
 } from '@xyflow/react'
 import { memo } from 'react'
-import type { Connector } from '@/lib/schema'
+import { describeToken } from '@/lib/motion/tokens'
+import type { Arrow } from '@/lib/screens'
 import { cn } from '@/lib/utils'
-import { useCanvasUi } from './canvas-ui'
 
-export type ConnectorEdgeType = Edge<{ connector: Connector }, 'connector'>
+export type ArrowEdgeType = Edge<{ arrow: Arrow }, 'arrow'>
 
-const animationLabel: Record<Connector['animation'], string> = {
+const presentationLabel: Record<string, string> = {
   push: 'Push',
-  modal: 'Modal',
-  fade: 'Fade',
-  none: 'Instant',
+  sheet: 'Sheet',
+  fullScreen: 'Full screen',
 }
 
-/** Bézier from the right edge of one frame to the left edge of the next. */
-export const ConnectorEdge = memo(function ConnectorEdge(
-  props: EdgeProps<ConnectorEdgeType>,
-) {
-  const connector = props.data?.connector
-  const highlighted = useCanvasUi((s) => s.highlighted === props.id)
-  const selectConnector = useCanvasUi((s) => s.selectConnector)
+/** Parent → child screen, derived from the route tree. */
+export const ArrowEdge = memo(function ArrowEdge(props: EdgeProps<ArrowEdgeType>) {
+  const arrow = props.data?.arrow
   const [path, labelX, labelY] = getBezierPath(props)
-  const active = props.selected || highlighted
 
   return (
     <>
       <BaseEdge
         id={props.id}
         path={path}
-        interactionWidth={24}
-        className={cn(highlighted && 'sb-edge-flow')}
-        style={{
-          stroke: active ? 'var(--brand)' : 'var(--frame-border)',
-          strokeWidth: active ? 2 : 1.5,
-          transition: 'stroke 200ms',
-        }}
+        style={{ stroke: 'var(--frame-border)', strokeWidth: 1.5 }}
       />
-      {connector && (
+      {arrow && (
         <EdgeLabelRenderer>
-          <button
-            type="button"
-            onClick={() => selectConnector(props.id)}
+          <div
             className={cn(
-              'nodrag nopan pointer-events-auto absolute flex items-center gap-1.5 rounded-full border bg-background px-2.5 py-1 text-[12px] shadow-sm transition-colors',
-              active
-                ? 'border-brand text-foreground'
-                : 'text-muted-foreground hover:text-foreground',
+              'nodrag nopan absolute flex items-center gap-1.5 rounded-full border bg-background px-2.5 py-1 text-[12px] text-muted-foreground shadow-sm',
             )}
             style={{
               transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
             }}
+            title={arrow.transition ? describeToken(arrow.transition) : undefined}
           >
-            {connector.label && <span className="font-medium">{connector.label}</span>}
-            <span className="text-muted-foreground">
-              {animationLabel[connector.animation]}
+            <span className="font-medium text-foreground">
+              {presentationLabel[arrow.presentation] ?? arrow.presentation}
             </span>
-          </button>
+          </div>
         </EdgeLabelRenderer>
       )}
     </>

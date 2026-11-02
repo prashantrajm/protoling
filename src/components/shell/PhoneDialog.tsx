@@ -1,4 +1,4 @@
-import { useParams } from '@tanstack/react-router'
+import { useLocation } from '@tanstack/react-router'
 import { Check, Copy, Hand, Keyboard, TriangleAlert } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { encode } from 'uqr'
@@ -19,8 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { frameKey, useEditor } from '@/lib/editor'
-import { frameLabel } from '@/lib/variants'
+import { useEditor } from '@/lib/editor'
+import { getHostRouter } from '@/lib/router-registry'
+import { projectScreens } from '@/lib/screens'
 import { useWorkspace } from '@/lib/workspace/store'
 
 /**
@@ -34,36 +35,32 @@ export function PhoneDialog() {
   const projects = useWorkspace((s) => s.projects)
   const meta = useWorkspace((s) => s.meta)
   const refreshMeta = useWorkspace((s) => s.refreshMeta)
-  const variants = useEditor((s) => s.variants)
-  const params = useParams({ strict: false }) as {
-    project?: string
-    canvas?: string
-    frame?: string
-  }
+  const location = useLocation()
 
-  // Everything that can be opened: one entry per frame, grouped by canvas.
+  // Everything that can be opened: each app's start, then its screens.
   const targets = useMemo(
     () =>
-      projects.flatMap((p) =>
-        p.canvases.flatMap((c) =>
-          (c.canvas?.frames ?? []).map((f) => ({
-            value: `${p.slug}/${c.slug}/${f.id}`,
-            group: `${p.project?.name ?? p.slug} / ${c.canvas?.name ?? c.slug}`,
-            label: frameLabel(f),
-          })),
-        ),
-      ),
+      projects
+        .filter((p) => p.hasApp)
+        .flatMap((p) => {
+          const group = p.project?.name ?? p.slug
+          return [
+            { value: `/${p.slug}`, group, label: 'App start' },
+            ...projectScreens(getHostRouter(), p.slug)
+              .filter((s) => s.url)
+              .map((s) => ({ value: s.url as string, group, label: s.name })),
+          ]
+        }),
     [projects],
   )
 
+  // In play mode, offer exactly what's on screen, variants included.
   const fromRoute = useMemo(() => {
-    if (!params.project || !params.canvas) return undefined
-    const prefix = `${params.project}/${params.canvas}/`
-    return (
-      targets.find((t) => t.value === `${prefix}${params.frame ?? ''}`) ??
-      targets.find((t) => t.value.startsWith(prefix))
-    )?.value
-  }, [params.project, params.canvas, params.frame, targets])
+    const play = location.pathname.match(/^\/p\/([^/]+)\/play\/?(.*)$/)
+    if (play) return `/${play[1]}${play[2] ? `/${play[2]}` : ''}${location.searchStr}`
+    const project = location.pathname.match(/^\/p\/([^/]+)/)?.[1]
+    return project ? `/${project}` : undefined
+  }, [location.pathname, location.searchStr])
 
   const [target, setTarget] = useState<string | undefined>()
   useEffect(() => {
@@ -73,14 +70,16 @@ export function PhoneDialog() {
     }
   }, [open, fromRoute, targets, refreshMeta])
 
-  const [project, canvas, frame] = target?.split('/') ?? []
-  const variant = target ? variants[frameKey(project, canvas, frame)] : undefined
-  const path = target
-    ? `play/${target}${variant && variant !== 'default' ? `?v=${encodeURIComponent(variant)}` : ''}`
-    : ''
-  const base = meta?.network.urls[0] ?? `${window.location.origin}/`
-  const url = `${base}${path}`
+  const base = (meta?.network.urls[0] ?? `${window.location.origin}/`).replace(/\/$/, '')
+  const url = `${base}${target ?? ''}`
   const exposed = meta?.network.exposed ?? false
+  const options =
+    target && !targets.some((t) => t.value === target)
+      ? [
+          { value: target, group: 'Current', label: 'What you’re playing now' },
+          ...targets,
+        ]
+      : targets
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -93,7 +92,7 @@ export function PhoneDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        {targets.length > 0 && (
+        {options.length > 0 && (
           <Select value={target} onValueChange={setTarget}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Choose a screen" />

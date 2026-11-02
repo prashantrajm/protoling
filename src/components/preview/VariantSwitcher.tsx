@@ -6,7 +6,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
-import { padIndex, type VariantOption } from '@/lib/variants'
+
+export interface VariantOption {
+  id: string
+  name: string
+  index: number
+}
+
+export function padIndex(index: number): string {
+  return String(index + 1).padStart(2, '0')
+}
 
 /** "01 / 03 ⌄" — matches the variant switcher in the canvas concepts. */
 export function VariantSwitcher({

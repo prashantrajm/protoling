@@ -1,10 +1,10 @@
 import { useNavigate } from '@tanstack/react-router'
 import {
-  FileText,
   Folder,
-  Maximize2,
+  LayoutGrid,
   Monitor,
   Moon,
+  Play,
   RotateCcw,
   Smartphone,
   Snail,
@@ -20,11 +20,13 @@ import {
   CommandList,
   CommandShortcut,
 } from '@/components/ui/command'
+import { projectBoards } from '@/lib/boards'
 import { useEditor } from '@/lib/editor'
-import { frameLabel } from '@/lib/variants'
+import { getHostRouter } from '@/lib/router-registry'
+import { projectScreens } from '@/lib/screens'
 import { useWorkspace } from '@/lib/workspace/store'
 
-/** ⌘K: jump to any project, canvas or screen, and run playback actions. */
+/** ⌘K: jump to any project, board or screen, and run playback actions. */
 export function CommandPalette() {
   const open = useEditor((s) => s.commandOpen)
   const setOpen = useEditor((s) => s.setCommandOpen)
@@ -45,14 +47,14 @@ export function CommandPalette() {
       description="Jump to a screen or run an action"
     >
       <Command>
-        <CommandInput placeholder="Search projects, canvases, screens…" />
+        <CommandInput placeholder="Search projects, boards, screens…" />
         <CommandList>
           <CommandEmpty>Nothing found.</CommandEmpty>
 
           <CommandGroup heading="Playback">
             <CommandItem onSelect={() => run(editor.replayAll)}>
               <RotateCcw />
-              Replay all
+              Replay
               <CommandShortcut>R</CommandShortcut>
             </CommandItem>
             <CommandItem onSelect={() => run(editor.toggleSlowMotion)}>
@@ -81,57 +83,88 @@ export function CommandPalette() {
             </CommandItem>
           </CommandGroup>
 
-          {projects.map((p) => (
-            <CommandGroup key={p.slug} heading={p.project?.name ?? p.slug}>
-              <CommandItem
-                value={`project ${p.project?.name ?? p.slug}`}
-                onSelect={() =>
-                  run(() => navigate({ to: '/p/$project', params: { project: p.slug } }))
-                }
-              >
-                <Folder />
-                {p.project?.name ?? p.slug}
-              </CommandItem>
-              {p.canvases.map((c) => (
-                <div key={c.slug}>
+          {projects.map((p) => {
+            const name = p.project?.name ?? p.slug
+            const screens = p.hasApp ? projectScreens(getHostRouter(), p.slug) : []
+            return (
+              <CommandGroup key={p.slug} heading={name}>
+                <CommandItem
+                  value={`project ${name}`}
+                  onSelect={() =>
+                    run(() =>
+                      navigate({ to: '/p/$project', params: { project: p.slug } }),
+                    )
+                  }
+                >
+                  <Folder />
+                  {name}
+                </CommandItem>
+                {p.hasApp && (
                   <CommandItem
-                    value={`canvas ${p.project?.name} ${c.canvas?.name ?? c.slug}`}
+                    value={`play ${name}`}
                     onSelect={() =>
                       run(() =>
                         navigate({
-                          to: '/p/$project/$canvas',
-                          params: { project: p.slug, canvas: c.slug },
+                          to: '/p/$project/play/$',
+                          params: { project: p.slug, _splat: '' },
                         }),
                       )
                     }
                   >
-                    <FileText />
-                    {c.canvas?.name ?? c.slug}
+                    <Play />
+                    Play {name}
                   </CommandItem>
-                  {c.canvas?.frames.map((f) => (
+                )}
+                {p.hasApp &&
+                  projectBoards(p).map((b) => (
                     <CommandItem
-                      key={f.id}
-                      value={`screen ${p.project?.name} ${c.canvas?.name} ${frameLabel(f)}`}
+                      key={b.slug}
+                      value={`board ${name} ${b.name}`}
                       onSelect={() =>
                         run(() =>
                           navigate({
-                            to: '/p/$project/$canvas/focus/$frame',
-                            params: { project: p.slug, canvas: c.slug, frame: f.id },
-                            search: {},
+                            to: '/p/$project/boards/$board',
+                            params: { project: p.slug, board: b.slug },
+                          }),
+                        )
+                      }
+                    >
+                      <LayoutGrid />
+                      {b.name}
+                    </CommandItem>
+                  ))}
+                {screens
+                  .filter((s) => s.url)
+                  .map((s) => (
+                    <CommandItem
+                      key={s.routeId}
+                      value={`screen ${name} ${s.name} ${s.key}`}
+                      onSelect={() =>
+                        run(() =>
+                          navigate({
+                            to: '/p/$project/play/$',
+                            params: {
+                              project: p.slug,
+                              _splat: (s.url ?? '').replace(
+                                new RegExp(`^/${p.slug}/?`),
+                                '',
+                              ),
+                            },
                           }),
                         )
                       }
                       className="pl-8"
                     >
-                      <Maximize2 />
-                      {frameLabel(f)}
-                      <span className="text-muted-foreground">{c.canvas?.name}</span>
+                      <Play />
+                      {s.name}
+                      <span className="font-mono text-[12px] text-muted-foreground">
+                        {s.key}
+                      </span>
                     </CommandItem>
                   ))}
-                </div>
-              ))}
-            </CommandGroup>
-          ))}
+              </CommandGroup>
+            )
+          })}
         </CommandList>
       </Command>
     </CommandDialog>

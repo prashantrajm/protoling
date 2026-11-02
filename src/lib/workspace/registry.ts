@@ -1,83 +1,67 @@
-import { canvasSchema, formatIssues, projectSchema } from '../schema'
-import { type CanvasEntry, type ProjectEntry, useWorkspace } from './store'
+import type { BoardDefinition } from '@/runtime/board'
+import { formatIssues, projectSchema } from '../schema'
+import { type ProjectEntry, useWorkspace } from './store'
 
 /**
- * Discovers everything under projects/ with import.meta.glob, so adding a
- * file is all it takes to add a project, canvas or screen.
+ * Discovers project metadata and boards under projects/. The apps themselves
+ * are TanStack route files, mounted by vite.config.ts.
  *
- * This module accepts its own hot updates: when a JSON file or screen changes
- * it re-runs and pushes fresh data and loaders into the store instead of
- * reloading the page. It exports nothing on purpose: importers of a
- * self-accepting module would keep its stale bindings.
+ * This module accepts its own hot updates and exports nothing, so editing a
+ * project.json or board updates the store without a reload.
  */
-
 const projectFiles = import.meta.glob<unknown>('/projects/*/project.json', {
   eager: true,
   import: 'default',
 })
-const canvasFiles = import.meta.glob<unknown>('/projects/*/canvases/*/canvas.json', {
+// Keys only: is there an app/ to mount?
+const appRoots = import.meta.glob('/projects/*/app/route.tsx')
+const boardFiles = import.meta.glob<unknown>('/projects/*/boards/*.ts', {
   eager: true,
   import: 'default',
 })
-const screenFiles = import.meta.glob<{ default: unknown }>(
-  '/projects/*/canvases/*/screens/*.tsx',
-)
 
-function parts(path: string): string[] {
-  return path.replace(/^\/projects\//, '').split('/')
+function segment(path: string, index: number): string {
+  return path.split('/')[index + 2]
+}
+
+function isBoard(value: unknown): value is BoardDefinition {
+  const b = value as BoardDefinition | null
+  return typeof b?.name === 'string' && Array.isArray(b.frames)
 }
 
 function build(): ProjectEntry[] {
-  const projects = new Map<string, ProjectEntry>()
-
-  for (const [path, raw] of Object.entries(projectFiles)) {
-    const [slug] = parts(path)
+  const projects: ProjectEntry[] = Object.entries(projectFiles).map(([path, raw]) => {
+    const slug = segment(path, 0)
     const parsed = projectSchema.safeParse(raw)
-    projects.set(slug, {
+    return {
       slug,
       project: parsed.success ? parsed.data : null,
       error: parsed.success ? null : formatIssues(parsed.error),
-      canvases: [],
-    })
-  }
-
-  const screensByCanvas = new Map<string, string[]>()
-  for (const path of Object.keys(screenFiles)) {
-    const [project, , canvas, , file] = parts(path)
-    const key = `${project}/${canvas}`
-    screensByCanvas.set(key, [
-      ...(screensByCanvas.get(key) ?? []),
-      file.replace(/\.tsx$/, ''),
-    ])
-  }
-
-  for (const [path, raw] of Object.entries(canvasFiles)) {
-    const [project, , slug] = parts(path)
-    const owner = projects.get(project)
-    if (!owner) continue
-    const parsed = canvasSchema.safeParse(raw)
-    const entry: CanvasEntry = {
-      project,
-      slug,
-      canvas: parsed.success ? parsed.data : null,
-      error: parsed.success ? null : formatIssues(parsed.error),
-      screens: screensByCanvas.get(`${project}/${slug}`) ?? [],
+      hasApp: `/projects/${slug}/app/route.tsx` in appRoots,
+      boards: [],
     }
-    owner.canvases.push(entry)
-  }
-
-  const sorted = [...projects.values()].sort((a, b) =>
-    (a.project?.name ?? a.slug).localeCompare(b.project?.name ?? b.slug),
-  )
-  for (const project of sorted) {
-    project.canvases.sort((a, b) =>
-      (a.canvas?.name ?? a.slug).localeCompare(b.canvas?.name ?? b.slug),
+  })
+  for (const [path, raw] of Object.entries(boardFiles)) {
+    const owner = projects.find((p) => p.slug === segment(path, 0))
+    if (!owner) continue
+    const slug = segment(path, 2).replace(/\.ts$/, '')
+    owner.boards.push(
+      isBoard(raw)
+        ? { slug, board: raw, error: null }
+        : {
+            slug,
+            board: null,
+            error: `${path} must \`export default defineBoard({...})\``,
+          },
     )
   }
-  return sorted
+  for (const p of projects) p.boards.sort((a, b) => a.slug.localeCompare(b.slug))
+  return projects.sort((a, b) =>
+    (a.project?.name ?? a.slug).localeCompare(b.project?.name ?? b.slug),
+  )
 }
 
-useWorkspace.getState().hydrate(build(), screenFiles)
+useWorkspace.getState().hydrate(build())
 
 if (import.meta.hot) {
   import.meta.hot.accept()

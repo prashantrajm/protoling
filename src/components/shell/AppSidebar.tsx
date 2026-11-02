@@ -1,22 +1,24 @@
 import { Link, useParams } from '@tanstack/react-router'
 import {
-  FileText,
   Folder,
   FolderOpen,
+  LayoutGrid,
   Monitor,
   Moon,
+  Play,
   Smartphone,
   Sun,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { projectBoards } from '@/lib/boards'
 import { type Theme, useEditor } from '@/lib/editor'
 import { cn } from '@/lib/utils'
 import { useWorkspace } from '@/lib/workspace/store'
 
 export function AppSidebar() {
   const projects = useWorkspace((s) => s.projects)
-  const params = useParams({ strict: false }) as { project?: string; canvas?: string }
+  const params = useParams({ strict: false }) as { project?: string }
 
   return (
     <aside className="flex w-[264px] shrink-0 flex-col border-r bg-sidebar">
@@ -31,7 +33,7 @@ export function AppSidebar() {
       <nav className="flex-1 overflow-y-auto px-4 pb-4">
         {projects.length === 0 && (
           <p className="px-3 py-2 text-sm text-muted-foreground">
-            No projects yet. Add a folder to <code>projects/</code>.
+            No projects yet. Add one under <code>projects/</code>.
           </p>
         )}
         <ul className="space-y-0.5">
@@ -43,33 +45,41 @@ export function AppSidebar() {
                 <Link
                   to="/p/$project"
                   params={{ project: project.slug }}
+                  activeOptions={{ exact: true }}
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-[15px] transition-colors hover:bg-sidebar-accent',
-                    open && !params.canvas && 'bg-brand-soft text-foreground',
+                    open && 'font-medium',
                   )}
+                  activeProps={{ className: 'bg-brand-soft' }}
                 >
                   <Icon className="size-[18px] text-muted-foreground" />
                   <span className="truncate">
                     {project.project?.name ?? project.slug}
                   </span>
                 </Link>
-                {open && project.canvases.length > 0 && (
+                {open && project.hasApp && (
                   <ul className="mt-0.5 space-y-0.5 pb-1">
-                    {project.canvases.map((entry) => (
-                      <li key={entry.slug}>
+                    <li>
+                      <Link
+                        to="/p/$project/play/$"
+                        params={{ project: project.slug, _splat: '' }}
+                        className={subLink}
+                        activeProps={{ className: subLinkActive }}
+                      >
+                        <Play className="size-4 shrink-0" />
+                        <span className="truncate">Play</span>
+                      </Link>
+                    </li>
+                    {projectBoards(project).map((board) => (
+                      <li key={board.slug}>
                         <Link
-                          to="/p/$project/$canvas"
-                          params={{ project: project.slug, canvas: entry.slug }}
-                          className={cn(
-                            'flex items-center gap-3 rounded-lg py-1.5 pl-9 pr-3 text-[14px] text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground',
-                            params.canvas === entry.slug &&
-                              'bg-brand-soft text-foreground',
-                          )}
+                          to="/p/$project/boards/$board"
+                          params={{ project: project.slug, board: board.slug }}
+                          className={subLink}
+                          activeProps={{ className: subLinkActive }}
                         >
-                          <FileText className="size-4 shrink-0" />
-                          <span className="truncate">
-                            {entry.canvas?.name ?? entry.slug}
-                          </span>
+                          <LayoutGrid className="size-4 shrink-0" />
+                          <span className="truncate">{board.name}</span>
                         </Link>
                       </li>
                     ))}
@@ -85,6 +95,10 @@ export function AppSidebar() {
     </aside>
   )
 }
+
+const subLink =
+  'flex items-center gap-3 rounded-lg py-1.5 pl-9 pr-3 text-[14px] text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground'
+const subLinkActive = 'bg-brand-soft text-foreground'
 
 const themes: { id: Theme; label: string; icon: typeof Sun }[] = [
   { id: 'light', label: 'Light', icon: Sun },

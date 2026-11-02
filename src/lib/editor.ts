@@ -23,9 +23,6 @@ interface EditorState {
   setCommandOpen: (open: boolean) => void
   phoneDialogOpen: boolean
   setPhoneDialogOpen: (open: boolean) => void
-  /** Chosen variant per frame, keyed "project/canvas/frame". Kept for the session. */
-  variants: Record<string, string>
-  setVariant: (key: string, variantId: string) => void
 }
 
 function readTheme(): Theme {
@@ -62,14 +59,7 @@ export const useEditor = create<EditorState>((set, get) => ({
   setCommandOpen: (commandOpen) => set({ commandOpen }),
   phoneDialogOpen: false,
   setPhoneDialogOpen: (phoneDialogOpen) => set({ phoneDialogOpen }),
-  variants: {},
-  setVariant: (key, variantId) =>
-    set({ variants: { ...get().variants, [key]: variantId } }),
 }))
-
-export function frameKey(project: string, canvas: string, frame: string): string {
-  return `${project}/${canvas}/${frame}`
-}
 
 darkQuery?.addEventListener('change', () => {
   if (useEditor.getState().theme === 'system') applyTheme('system')
