@@ -1,0 +1,31 @@
+{
+  "name": "Onboarding",
+  "description": "First-run screens with an orbit loop and growing bars.",
+  "device": "iphone-17-pro",
+  "frames": [
+    {
+      "id": "welcome",
+      "screen": "Welcome",
+      "position": { "x": 0, "y": 0 },
+      "statusBar": true,
+      "variants": []
+    },
+    {
+      "id": "progress",
+      "screen": "Progress",
+      "position": { "x": 520, "y": 0 },
+      "statusBar": true,
+      "variants": []
+    }
+  ],
+  "connectors": [
+    {
+      "id": "welcome-progress",
+      "from": "welcome",
+      "to": "progress",
+      "label": "Continue",
+      "animation": "push",
+      "transition": { "type": "spring", "visualDuration": 0.5, "bounce": 0 }
+    }
+  ]
+}

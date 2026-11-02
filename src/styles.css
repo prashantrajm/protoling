@@ -171,3 +171,82 @@ body {
     @apply font-sans;
   }
 }
+
+/* Screens: system font like a real phone, and CSS animations pause with the frame. */
+.sb-screen {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui,
+    sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sb-screen[data-paused] *,
+.sb-screen[data-paused] *::before,
+.sb-screen[data-paused] *::after {
+  /* biome-ignore lint/complexity/noImportantStyles: must beat any animation set by a screen */
+  animation-play-state: paused !important;
+}
+
+/* Shiki dual themes: colours come from CSS variables so the theme switch is instant. */
+.sb-code pre {
+  /* biome-ignore lint/complexity/noImportantStyles: Shiki sets an inline background */
+  background: transparent !important;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+}
+.sb-code span {
+  color: var(--shiki-light);
+}
+.dark .sb-code span {
+  color: var(--shiki-dark);
+}
+
+/* Dotted canvas surface, matching React Flow's background on the canvas page. */
+.sb-dots {
+  background-image: radial-gradient(var(--canvas-dot) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Canvas: connectors attach at frame edges without visible handles. */
+.react-flow .sb-handle {
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  min-width: 0;
+  min-height: 0;
+  border: 0;
+}
+
+/* A connector flashes along its length after a screen navigates through it. */
+.sb-edge-flow {
+  stroke-dasharray: 6 6;
+  animation: sb-edge-flow 0.6s linear infinite;
+}
+@keyframes sb-edge-flow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sb-edge-flow {
+    animation: none;
+  }
+}
+
+.react-flow__node-frame {
+  cursor: default;
+}
+
+/* Embedded and phone previews: the prototype owns the whole viewport. */
+html.sb-embed,
+html.sb-embed body,
+html.sb-play,
+html.sb-play body {
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: #000;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}

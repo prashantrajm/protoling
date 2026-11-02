@@ -7,7 +7,7 @@ import {
   projectSchema,
   screenNamePattern,
   slugPattern,
-} from '../src/lib/schema'
+} from '../src/lib/schema.ts'
 
 /**
  * File operations behind the dev plugin's endpoints. Everything is confined

@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
-import { springboard } from './vite/springboard-plugin'
+import { springboard } from './vite/springboard-plugin.ts'
 
 export default defineConfig({
   resolve: { tsconfigPaths: true },

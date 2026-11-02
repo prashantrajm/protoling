@@ -8,7 +8,7 @@ import {
   createScreen,
   RequestError,
   saveCanvas,
-} from './project-files'
+} from './project-files.ts'
 
 /**
  * Dev-server endpoints that write projects back to disk. Reads go through

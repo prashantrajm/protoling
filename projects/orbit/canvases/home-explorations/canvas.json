@@ -1,0 +1,38 @@
+{
+  "name": "Home explorations",
+  "description": "Three takes on how the Today list arrives.",
+  "device": "iphone-17-pro",
+  "frames": [
+    {
+      "id": "home",
+      "screen": "Home",
+      "position": { "x": 0, "y": 0 },
+      "statusBar": true,
+      "variants": []
+    },
+    {
+      "id": "detail",
+      "screen": "Detail",
+      "position": { "x": 520, "y": 0 },
+      "statusBar": true,
+      "variants": []
+    },
+    {
+      "id": "profile",
+      "screen": "Profile",
+      "position": { "x": 1040, "y": 0 },
+      "statusBar": true,
+      "variants": []
+    }
+  ],
+  "connectors": [
+    {
+      "id": "home-detail",
+      "from": "home",
+      "to": "detail",
+      "label": "Tap task",
+      "animation": "push",
+      "transition": { "type": "spring", "visualDuration": 0.45, "bounce": 0 }
+    }
+  ]
+}

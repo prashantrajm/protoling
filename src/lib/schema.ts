@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { deviceIds } from './devices'
+import { deviceIds } from './devices.ts'
 
 /**
  * On-disk formats for `project.json` and `canvas.json`. Validated when read
