@@ -1,54 +1,37 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-
-import appCss from '../styles.css?url'
+import {
+  createRootRoute,
+  Outlet,
+  retainSearchParams,
+  useLocation,
+} from '@tanstack/react-router'
+import { MiniAppHost } from '@/components/app/MiniAppHost'
+import { useAppProjects } from '@/lib/workspace/store'
 
 export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      {
-        charSet: 'utf-8',
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        title: 'Springboard',
-      },
-    ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
-    ],
+  // `v` holds variant choices for the screens of a mini app, so links can be
+  // shared. Kept across navigation.
+  validateSearch: (search: Record<string, unknown>): { v?: string } => ({
+    v: typeof search.v === 'string' && search.v ? search.v : undefined,
   }),
-  shellComponent: RootDocument,
+  search: { middlewares: [retainSearchParams(['v'])] },
+  component: Root,
+  notFoundComponent: () => (
+    <div className="grid h-full place-items-center text-sm text-muted-foreground">
+      Nothing here.
+    </div>
+  ),
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
-        <Scripts />
-      </body>
-    </html>
-  )
+function Root() {
+  const { pathname } = useLocation()
+  const projects = useAppProjects()
+  const first = pathname.split('/')[1]
+  if (projects.includes(first)) {
+    return (
+      <MiniAppHost project={first}>
+        <Outlet />
+      </MiniAppHost>
+    )
+  }
+  return <Outlet />
 }

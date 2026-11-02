@@ -9,60 +9,422 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/host/_app'
+import { Route as OrbitRouteRouteImport } from './../projects/orbit/app/route'
+import { Route as AppDotindexRouteImport } from './routes/host/_app.index'
+import { Route as OrbitIndexRouteImport } from './../projects/orbit/app/index'
+import { Route as OrbitTabsRouteRouteImport } from './../projects/orbit/app/_tabs/route'
+import { Route as OrbitWelcomeRouteRouteImport } from './../projects/orbit/app/welcome/route'
+import { Route as OrbitTabsInboxRouteImport } from './../projects/orbit/app/_tabs/inbox'
+import { Route as OrbitTabsMeRouteImport } from './../projects/orbit/app/_tabs/me'
+import { Route as OrbitTabsSearchRouteImport } from './../projects/orbit/app/_tabs/search'
+import { Route as OrbitTabsTodayRouteRouteImport } from './../projects/orbit/app/_tabs/today/route'
+import { Route as OrbitWelcomeProgressRouteImport } from './../projects/orbit/app/welcome/progress'
+import { Route as AppDotpDotprojectDotindexRouteImport } from './routes/host/_app.p.$project.index'
+import { Route as OrbitTabsTodayDetailRouteRouteImport } from './../projects/orbit/app/_tabs/today/detail/route'
+import { Route as AppDotpDotprojectDotboardsDotboardRouteImport } from './routes/host/_app.p.$project.boards.$board'
+import { Route as AppDotpDotprojectDotplayDotsplatRouteImport } from './routes/host/_app.p.$project.play.$'
+import { Route as OrbitTabsTodayDetailMoveRouteImport } from './../projects/orbit/app/_tabs/today/detail/move'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrbitRouteRoute = OrbitRouteRouteImport.update({
+  id: '/orbit',
+  path: '/orbit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppDotindexRoute = AppDotindexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const OrbitIndexRoute = OrbitIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OrbitRouteRoute,
+} as any)
+const OrbitTabsRouteRoute = OrbitTabsRouteRouteImport.update({
+  id: '/_tabs',
+  getParentRoute: () => OrbitRouteRoute,
+} as any)
+const OrbitWelcomeRouteRoute = OrbitWelcomeRouteRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => OrbitRouteRoute,
+} as any)
+const OrbitTabsInboxRoute = OrbitTabsInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => OrbitTabsRouteRoute,
+} as any)
+const OrbitTabsMeRoute = OrbitTabsMeRouteImport.update({
+  id: '/me',
+  path: '/me',
+  getParentRoute: () => OrbitTabsRouteRoute,
+} as any)
+const OrbitTabsSearchRoute = OrbitTabsSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => OrbitTabsRouteRoute,
+} as any)
+const OrbitTabsTodayRouteRoute = OrbitTabsTodayRouteRouteImport.update({
+  id: '/today',
+  path: '/today',
+  getParentRoute: () => OrbitTabsRouteRoute,
+} as any)
+const OrbitWelcomeProgressRoute = OrbitWelcomeProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => OrbitWelcomeRouteRoute,
+} as any)
+const AppDotpDotprojectDotindexRoute =
+  AppDotpDotprojectDotindexRouteImport.update({
+    id: '/p/$project/',
+    path: '/p/$project/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const OrbitTabsTodayDetailRouteRoute =
+  OrbitTabsTodayDetailRouteRouteImport.update({
+    id: '/detail',
+    path: '/detail',
+    getParentRoute: () => OrbitTabsTodayRouteRoute,
+  } as any)
+const AppDotpDotprojectDotboardsDotboardRoute =
+  AppDotpDotprojectDotboardsDotboardRouteImport.update({
+    id: '/p/$project/boards/$board',
+    path: '/p/$project/boards/$board',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppDotpDotprojectDotplayDotsplatRoute =
+  AppDotpDotprojectDotplayDotsplatRouteImport.update({
+    id: '/p/$project/play/$',
+    path: '/p/$project/play/$',
+    getParentRoute: () => AppRoute,
+  } as any)
+const OrbitTabsTodayDetailMoveRoute =
+  OrbitTabsTodayDetailMoveRouteImport.update({
+    id: '/move',
+    path: '/move',
+    getParentRoute: () => OrbitTabsTodayDetailRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/orbit': typeof OrbitRouteRouteWithChildren
+  '/': typeof AppDotindexRoute
+  '/orbit/welcome': typeof OrbitWelcomeRouteRouteWithChildren
+  '/orbit/': typeof OrbitIndexRoute
+  '/orbit/today': typeof OrbitTabsTodayRouteRouteWithChildren
+  '/orbit/inbox': typeof OrbitTabsInboxRoute
+  '/orbit/me': typeof OrbitTabsMeRoute
+  '/orbit/search': typeof OrbitTabsSearchRoute
+  '/orbit/welcome/progress': typeof OrbitWelcomeProgressRoute
+  '/orbit/today/detail': typeof OrbitTabsTodayDetailRouteRouteWithChildren
+  '/p/$project/': typeof AppDotpDotprojectDotindexRoute
+  '/p/$project/boards/$board': typeof AppDotpDotprojectDotboardsDotboardRoute
+  '/p/$project/play/$': typeof AppDotpDotprojectDotplayDotsplatRoute
+  '/orbit/today/detail/move': typeof OrbitTabsTodayDetailMoveRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/orbit': typeof OrbitIndexRoute
+  '/orbit/welcome': typeof OrbitWelcomeRouteRouteWithChildren
+  '/': typeof AppDotindexRoute
+  '/orbit/today': typeof OrbitTabsTodayRouteRouteWithChildren
+  '/orbit/inbox': typeof OrbitTabsInboxRoute
+  '/orbit/me': typeof OrbitTabsMeRoute
+  '/orbit/search': typeof OrbitTabsSearchRoute
+  '/orbit/welcome/progress': typeof OrbitWelcomeProgressRoute
+  '/orbit/today/detail': typeof OrbitTabsTodayDetailRouteRouteWithChildren
+  '/p/$project': typeof AppDotpDotprojectDotindexRoute
+  '/p/$project/boards/$board': typeof AppDotpDotprojectDotboardsDotboardRoute
+  '/p/$project/play/$': typeof AppDotpDotprojectDotplayDotsplatRoute
+  '/orbit/today/detail/move': typeof OrbitTabsTodayDetailMoveRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/orbit': typeof OrbitRouteRouteWithChildren
+  '/_app': typeof AppRouteWithChildren
+  '/orbit/_tabs': typeof OrbitTabsRouteRouteWithChildren
+  '/orbit/welcome': typeof OrbitWelcomeRouteRouteWithChildren
+  '/_app/': typeof AppDotindexRoute
+  '/orbit/': typeof OrbitIndexRoute
+  '/orbit/_tabs/today': typeof OrbitTabsTodayRouteRouteWithChildren
+  '/orbit/_tabs/inbox': typeof OrbitTabsInboxRoute
+  '/orbit/_tabs/me': typeof OrbitTabsMeRoute
+  '/orbit/_tabs/search': typeof OrbitTabsSearchRoute
+  '/orbit/welcome/progress': typeof OrbitWelcomeProgressRoute
+  '/orbit/_tabs/today/detail': typeof OrbitTabsTodayDetailRouteRouteWithChildren
+  '/_app/p/$project/': typeof AppDotpDotprojectDotindexRoute
+  '/_app/p/$project/boards/$board': typeof AppDotpDotprojectDotboardsDotboardRoute
+  '/_app/p/$project/play/$': typeof AppDotpDotprojectDotplayDotsplatRoute
+  '/orbit/_tabs/today/detail/move': typeof OrbitTabsTodayDetailMoveRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/orbit'
+    | '/'
+    | '/orbit/welcome'
+    | '/orbit/'
+    | '/orbit/today'
+    | '/orbit/inbox'
+    | '/orbit/me'
+    | '/orbit/search'
+    | '/orbit/welcome/progress'
+    | '/orbit/today/detail'
+    | '/p/$project/'
+    | '/p/$project/boards/$board'
+    | '/p/$project/play/$'
+    | '/orbit/today/detail/move'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/orbit'
+    | '/orbit/welcome'
+    | '/'
+    | '/orbit/today'
+    | '/orbit/inbox'
+    | '/orbit/me'
+    | '/orbit/search'
+    | '/orbit/welcome/progress'
+    | '/orbit/today/detail'
+    | '/p/$project'
+    | '/p/$project/boards/$board'
+    | '/p/$project/play/$'
+    | '/orbit/today/detail/move'
+  id:
+    | '__root__'
+    | '/orbit'
+    | '/_app'
+    | '/orbit/_tabs'
+    | '/orbit/welcome'
+    | '/_app/'
+    | '/orbit/'
+    | '/orbit/_tabs/today'
+    | '/orbit/_tabs/inbox'
+    | '/orbit/_tabs/me'
+    | '/orbit/_tabs/search'
+    | '/orbit/welcome/progress'
+    | '/orbit/_tabs/today/detail'
+    | '/_app/p/$project/'
+    | '/_app/p/$project/boards/$board'
+    | '/_app/p/$project/play/$'
+    | '/orbit/_tabs/today/detail/move'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  OrbitRouteRoute: typeof OrbitRouteRouteWithChildren
+  AppRoute: typeof AppRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/orbit': {
+      id: '/orbit'
+      path: '/orbit'
+      fullPath: '/orbit'
+      preLoaderRoute: typeof OrbitRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppDotindexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/orbit/': {
+      id: '/orbit/'
+      path: '/'
+      fullPath: '/orbit/'
+      preLoaderRoute: typeof OrbitIndexRouteImport
+      parentRoute: typeof OrbitRouteRoute
+    }
+    '/orbit/_tabs': {
+      id: '/orbit/_tabs'
+      path: ''
+      fullPath: '/orbit'
+      preLoaderRoute: typeof OrbitTabsRouteRouteImport
+      parentRoute: typeof OrbitRouteRoute
+    }
+    '/orbit/welcome': {
+      id: '/orbit/welcome'
+      path: '/welcome'
+      fullPath: '/orbit/welcome'
+      preLoaderRoute: typeof OrbitWelcomeRouteRouteImport
+      parentRoute: typeof OrbitRouteRoute
+    }
+    '/orbit/_tabs/inbox': {
+      id: '/orbit/_tabs/inbox'
+      path: '/inbox'
+      fullPath: '/orbit/inbox'
+      preLoaderRoute: typeof OrbitTabsInboxRouteImport
+      parentRoute: typeof OrbitTabsRouteRoute
+    }
+    '/orbit/_tabs/me': {
+      id: '/orbit/_tabs/me'
+      path: '/me'
+      fullPath: '/orbit/me'
+      preLoaderRoute: typeof OrbitTabsMeRouteImport
+      parentRoute: typeof OrbitTabsRouteRoute
+    }
+    '/orbit/_tabs/search': {
+      id: '/orbit/_tabs/search'
+      path: '/search'
+      fullPath: '/orbit/search'
+      preLoaderRoute: typeof OrbitTabsSearchRouteImport
+      parentRoute: typeof OrbitTabsRouteRoute
+    }
+    '/orbit/_tabs/today': {
+      id: '/orbit/_tabs/today'
+      path: '/today'
+      fullPath: '/orbit/today'
+      preLoaderRoute: typeof OrbitTabsTodayRouteRouteImport
+      parentRoute: typeof OrbitTabsRouteRoute
+    }
+    '/orbit/welcome/progress': {
+      id: '/orbit/welcome/progress'
+      path: '/progress'
+      fullPath: '/orbit/welcome/progress'
+      preLoaderRoute: typeof OrbitWelcomeProgressRouteImport
+      parentRoute: typeof OrbitWelcomeRouteRoute
+    }
+    '/_app/p/$project/': {
+      id: '/_app/p/$project/'
+      path: '/p/$project'
+      fullPath: '/p/$project/'
+      preLoaderRoute: typeof AppDotpDotprojectDotindexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/orbit/_tabs/today/detail': {
+      id: '/orbit/_tabs/today/detail'
+      path: '/detail'
+      fullPath: '/orbit/today/detail'
+      preLoaderRoute: typeof OrbitTabsTodayDetailRouteRouteImport
+      parentRoute: typeof OrbitTabsTodayRouteRoute
+    }
+    '/_app/p/$project/boards/$board': {
+      id: '/_app/p/$project/boards/$board'
+      path: '/p/$project/boards/$board'
+      fullPath: '/p/$project/boards/$board'
+      preLoaderRoute: typeof AppDotpDotprojectDotboardsDotboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/p/$project/play/$': {
+      id: '/_app/p/$project/play/$'
+      path: '/p/$project/play/$'
+      fullPath: '/p/$project/play/$'
+      preLoaderRoute: typeof AppDotpDotprojectDotplayDotsplatRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/orbit/_tabs/today/detail/move': {
+      id: '/orbit/_tabs/today/detail/move'
+      path: '/move'
+      fullPath: '/orbit/today/detail/move'
+      preLoaderRoute: typeof OrbitTabsTodayDetailMoveRouteImport
+      parentRoute: typeof OrbitTabsTodayDetailRouteRoute
     }
   }
 }
 
+interface OrbitTabsTodayDetailRouteRouteChildren {
+  OrbitTabsTodayDetailMoveRoute: typeof OrbitTabsTodayDetailMoveRoute
+}
+
+const OrbitTabsTodayDetailRouteRouteChildren: OrbitTabsTodayDetailRouteRouteChildren =
+  {
+    OrbitTabsTodayDetailMoveRoute: OrbitTabsTodayDetailMoveRoute,
+  }
+
+const OrbitTabsTodayDetailRouteRouteWithChildren =
+  OrbitTabsTodayDetailRouteRoute._addFileChildren(
+    OrbitTabsTodayDetailRouteRouteChildren,
+  )
+
+interface OrbitTabsTodayRouteRouteChildren {
+  OrbitTabsTodayDetailRouteRoute: typeof OrbitTabsTodayDetailRouteRouteWithChildren
+}
+
+const OrbitTabsTodayRouteRouteChildren: OrbitTabsTodayRouteRouteChildren = {
+  OrbitTabsTodayDetailRouteRoute: OrbitTabsTodayDetailRouteRouteWithChildren,
+}
+
+const OrbitTabsTodayRouteRouteWithChildren =
+  OrbitTabsTodayRouteRoute._addFileChildren(OrbitTabsTodayRouteRouteChildren)
+
+interface OrbitTabsRouteRouteChildren {
+  OrbitTabsTodayRouteRoute: typeof OrbitTabsTodayRouteRouteWithChildren
+  OrbitTabsInboxRoute: typeof OrbitTabsInboxRoute
+  OrbitTabsMeRoute: typeof OrbitTabsMeRoute
+  OrbitTabsSearchRoute: typeof OrbitTabsSearchRoute
+}
+
+const OrbitTabsRouteRouteChildren: OrbitTabsRouteRouteChildren = {
+  OrbitTabsTodayRouteRoute: OrbitTabsTodayRouteRouteWithChildren,
+  OrbitTabsInboxRoute: OrbitTabsInboxRoute,
+  OrbitTabsMeRoute: OrbitTabsMeRoute,
+  OrbitTabsSearchRoute: OrbitTabsSearchRoute,
+}
+
+const OrbitTabsRouteRouteWithChildren = OrbitTabsRouteRoute._addFileChildren(
+  OrbitTabsRouteRouteChildren,
+)
+
+interface OrbitWelcomeRouteRouteChildren {
+  OrbitWelcomeProgressRoute: typeof OrbitWelcomeProgressRoute
+}
+
+const OrbitWelcomeRouteRouteChildren: OrbitWelcomeRouteRouteChildren = {
+  OrbitWelcomeProgressRoute: OrbitWelcomeProgressRoute,
+}
+
+const OrbitWelcomeRouteRouteWithChildren =
+  OrbitWelcomeRouteRoute._addFileChildren(OrbitWelcomeRouteRouteChildren)
+
+interface OrbitRouteRouteChildren {
+  OrbitTabsRouteRoute: typeof OrbitTabsRouteRouteWithChildren
+  OrbitWelcomeRouteRoute: typeof OrbitWelcomeRouteRouteWithChildren
+  OrbitIndexRoute: typeof OrbitIndexRoute
+}
+
+const OrbitRouteRouteChildren: OrbitRouteRouteChildren = {
+  OrbitTabsRouteRoute: OrbitTabsRouteRouteWithChildren,
+  OrbitWelcomeRouteRoute: OrbitWelcomeRouteRouteWithChildren,
+  OrbitIndexRoute: OrbitIndexRoute,
+}
+
+const OrbitRouteRouteWithChildren = OrbitRouteRoute._addFileChildren(
+  OrbitRouteRouteChildren,
+)
+
+interface AppRouteChildren {
+  AppDotindexRoute: typeof AppDotindexRoute
+  AppDotpDotprojectDotindexRoute: typeof AppDotpDotprojectDotindexRoute
+  AppDotpDotprojectDotboardsDotboardRoute: typeof AppDotpDotprojectDotboardsDotboardRoute
+  AppDotpDotprojectDotplayDotsplatRoute: typeof AppDotpDotprojectDotplayDotsplatRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppDotindexRoute: AppDotindexRoute,
+  AppDotpDotprojectDotindexRoute: AppDotpDotprojectDotindexRoute,
+  AppDotpDotprojectDotboardsDotboardRoute:
+    AppDotpDotprojectDotboardsDotboardRoute,
+  AppDotpDotprojectDotplayDotsplatRoute: AppDotpDotprojectDotplayDotsplatRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  OrbitRouteRoute: OrbitRouteRouteWithChildren,
+  AppRoute: AppRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
