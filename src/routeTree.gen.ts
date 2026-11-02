@@ -9,108 +9,196 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AppRouteImport } from './routes/_app'
-import { Route as AppIndexRouteImport } from './routes/_app.index'
-import { Route as AppPProjectIndexRouteImport } from './routes/_app.p.$project.index'
-import { Route as EmbedProjectCanvasFrameRouteImport } from './routes/embed.$project.$canvas.$frame'
-import { Route as PlayProjectCanvasFrameRouteImport } from './routes/play.$project.$canvas.$frame'
-import { Route as AppPProjectCanvasIndexRouteImport } from './routes/_app.p.$project.$canvas.index'
-import { Route as AppPProjectCanvasFocusFrameRouteImport } from './routes/_app.p.$project.$canvas.focus.$frame'
+import { Route as AppRouteImport } from './routes/host/_app'
+import { Route as SpikeRouteRouteImport } from './../projects/spike/app/route'
+import { Route as SpikeCanvasRouteImport } from './routes/host/spike-canvas'
+import { Route as AppDotindexRouteImport } from './routes/host/_app.index'
+import { Route as SpikeIndexRouteImport } from './../projects/spike/app/index'
+import { Route as SpikeMeRouteImport } from './../projects/spike/app/me'
+import { Route as SpikeTodayRouteRouteImport } from './../projects/spike/app/today/route'
+import { Route as SpikeTodayDetailRouteRouteImport } from './../projects/spike/app/today/detail/route'
+import { Route as AppDotpDotprojectDotindexRouteImport } from './routes/host/_app.p.$project.index'
+import { Route as EmbedDotprojectDotcanvasDotframeRouteImport } from './routes/host/embed.$project.$canvas.$frame'
+import { Route as PlayDotprojectDotcanvasDotframeRouteImport } from './routes/host/play.$project.$canvas.$frame'
+import { Route as SpikeTodayDetailMoveRouteImport } from './../projects/spike/app/today/detail/move'
+import { Route as AppDotpDotprojectDotcanvasDotindexRouteImport } from './routes/host/_app.p.$project.$canvas.index'
+import { Route as AppDotpDotprojectDotcanvasDotfocusDotframeRouteImport } from './routes/host/_app.p.$project.$canvas.focus.$frame'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppIndexRoute = AppIndexRouteImport.update({
+const SpikeRouteRoute = SpikeRouteRouteImport.update({
+  id: '/spike',
+  path: '/spike',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpikeCanvasRoute = SpikeCanvasRouteImport.update({
+  id: '/spike-canvas',
+  path: '/spike-canvas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppDotindexRoute = AppDotindexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-const AppPProjectIndexRoute = AppPProjectIndexRouteImport.update({
-  id: '/p/$project/',
-  path: '/p/$project/',
-  getParentRoute: () => AppRoute,
+const SpikeIndexRoute = SpikeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SpikeRouteRoute,
 } as any)
-const EmbedProjectCanvasFrameRoute = EmbedProjectCanvasFrameRouteImport.update({
-  id: '/embed/$project/$canvas/$frame',
-  path: '/embed/$project/$canvas/$frame',
-  getParentRoute: () => rootRouteImport,
+const SpikeMeRoute = SpikeMeRouteImport.update({
+  id: '/me',
+  path: '/me',
+  getParentRoute: () => SpikeRouteRoute,
 } as any)
-const PlayProjectCanvasFrameRoute = PlayProjectCanvasFrameRouteImport.update({
-  id: '/play/$project/$canvas/$frame',
-  path: '/play/$project/$canvas/$frame',
-  getParentRoute: () => rootRouteImport,
+const SpikeTodayRouteRoute = SpikeTodayRouteRouteImport.update({
+  id: '/today',
+  path: '/today',
+  getParentRoute: () => SpikeRouteRoute,
 } as any)
-const AppPProjectCanvasIndexRoute = AppPProjectCanvasIndexRouteImport.update({
-  id: '/p/$project/$canvas/',
-  path: '/p/$project/$canvas/',
-  getParentRoute: () => AppRoute,
+const SpikeTodayDetailRouteRoute = SpikeTodayDetailRouteRouteImport.update({
+  id: '/detail',
+  path: '/detail',
+  getParentRoute: () => SpikeTodayRouteRoute,
 } as any)
-const AppPProjectCanvasFocusFrameRoute =
-  AppPProjectCanvasFocusFrameRouteImport.update({
+const AppDotpDotprojectDotindexRoute =
+  AppDotpDotprojectDotindexRouteImport.update({
+    id: '/p/$project/',
+    path: '/p/$project/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const EmbedDotprojectDotcanvasDotframeRoute =
+  EmbedDotprojectDotcanvasDotframeRouteImport.update({
+    id: '/embed/$project/$canvas/$frame',
+    path: '/embed/$project/$canvas/$frame',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const PlayDotprojectDotcanvasDotframeRoute =
+  PlayDotprojectDotcanvasDotframeRouteImport.update({
+    id: '/play/$project/$canvas/$frame',
+    path: '/play/$project/$canvas/$frame',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SpikeTodayDetailMoveRoute = SpikeTodayDetailMoveRouteImport.update({
+  id: '/move',
+  path: '/move',
+  getParentRoute: () => SpikeTodayDetailRouteRoute,
+} as any)
+const AppDotpDotprojectDotcanvasDotindexRoute =
+  AppDotpDotprojectDotcanvasDotindexRouteImport.update({
+    id: '/p/$project/$canvas/',
+    path: '/p/$project/$canvas/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppDotpDotprojectDotcanvasDotfocusDotframeRoute =
+  AppDotpDotprojectDotcanvasDotfocusDotframeRouteImport.update({
     id: '/p/$project/$canvas/focus/$frame',
     path: '/p/$project/$canvas/focus/$frame',
     getParentRoute: () => AppRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AppIndexRoute
-  '/embed/$project/$canvas/$frame': typeof EmbedProjectCanvasFrameRoute
-  '/play/$project/$canvas/$frame': typeof PlayProjectCanvasFrameRoute
-  '/p/$project/': typeof AppPProjectIndexRoute
-  '/p/$project/$canvas/': typeof AppPProjectCanvasIndexRoute
-  '/p/$project/$canvas/focus/$frame': typeof AppPProjectCanvasFocusFrameRoute
+  '/spike': typeof SpikeRouteRouteWithChildren
+  '/': typeof AppDotindexRoute
+  '/spike-canvas': typeof SpikeCanvasRoute
+  '/spike/today': typeof SpikeTodayRouteRouteWithChildren
+  '/spike/me': typeof SpikeMeRoute
+  '/spike/': typeof SpikeIndexRoute
+  '/spike/today/detail': typeof SpikeTodayDetailRouteRouteWithChildren
+  '/embed/$project/$canvas/$frame': typeof EmbedDotprojectDotcanvasDotframeRoute
+  '/play/$project/$canvas/$frame': typeof PlayDotprojectDotcanvasDotframeRoute
+  '/spike/today/detail/move': typeof SpikeTodayDetailMoveRoute
+  '/p/$project/': typeof AppDotpDotprojectDotindexRoute
+  '/p/$project/$canvas/': typeof AppDotpDotprojectDotcanvasDotindexRoute
+  '/p/$project/$canvas/focus/$frame': typeof AppDotpDotprojectDotcanvasDotfocusDotframeRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AppIndexRoute
-  '/embed/$project/$canvas/$frame': typeof EmbedProjectCanvasFrameRoute
-  '/play/$project/$canvas/$frame': typeof PlayProjectCanvasFrameRoute
-  '/p/$project': typeof AppPProjectIndexRoute
-  '/p/$project/$canvas': typeof AppPProjectCanvasIndexRoute
-  '/p/$project/$canvas/focus/$frame': typeof AppPProjectCanvasFocusFrameRoute
+  '/spike-canvas': typeof SpikeCanvasRoute
+  '/spike/today': typeof SpikeTodayRouteRouteWithChildren
+  '/spike/me': typeof SpikeMeRoute
+  '/': typeof AppDotindexRoute
+  '/spike': typeof SpikeIndexRoute
+  '/spike/today/detail': typeof SpikeTodayDetailRouteRouteWithChildren
+  '/embed/$project/$canvas/$frame': typeof EmbedDotprojectDotcanvasDotframeRoute
+  '/play/$project/$canvas/$frame': typeof PlayDotprojectDotcanvasDotframeRoute
+  '/spike/today/detail/move': typeof SpikeTodayDetailMoveRoute
+  '/p/$project': typeof AppDotpDotprojectDotindexRoute
+  '/p/$project/$canvas': typeof AppDotpDotprojectDotcanvasDotindexRoute
+  '/p/$project/$canvas/focus/$frame': typeof AppDotpDotprojectDotcanvasDotfocusDotframeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/spike': typeof SpikeRouteRouteWithChildren
   '/_app': typeof AppRouteWithChildren
-  '/_app/': typeof AppIndexRoute
-  '/embed/$project/$canvas/$frame': typeof EmbedProjectCanvasFrameRoute
-  '/play/$project/$canvas/$frame': typeof PlayProjectCanvasFrameRoute
-  '/_app/p/$project/': typeof AppPProjectIndexRoute
-  '/_app/p/$project/$canvas/': typeof AppPProjectCanvasIndexRoute
-  '/_app/p/$project/$canvas/focus/$frame': typeof AppPProjectCanvasFocusFrameRoute
+  '/spike-canvas': typeof SpikeCanvasRoute
+  '/spike/today': typeof SpikeTodayRouteRouteWithChildren
+  '/spike/me': typeof SpikeMeRoute
+  '/_app/': typeof AppDotindexRoute
+  '/spike/': typeof SpikeIndexRoute
+  '/spike/today/detail': typeof SpikeTodayDetailRouteRouteWithChildren
+  '/embed/$project/$canvas/$frame': typeof EmbedDotprojectDotcanvasDotframeRoute
+  '/play/$project/$canvas/$frame': typeof PlayDotprojectDotcanvasDotframeRoute
+  '/spike/today/detail/move': typeof SpikeTodayDetailMoveRoute
+  '/_app/p/$project/': typeof AppDotpDotprojectDotindexRoute
+  '/_app/p/$project/$canvas/': typeof AppDotpDotprojectDotcanvasDotindexRoute
+  '/_app/p/$project/$canvas/focus/$frame': typeof AppDotpDotprojectDotcanvasDotfocusDotframeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/spike'
     | '/'
+    | '/spike-canvas'
+    | '/spike/today'
+    | '/spike/me'
+    | '/spike/'
+    | '/spike/today/detail'
     | '/embed/$project/$canvas/$frame'
     | '/play/$project/$canvas/$frame'
+    | '/spike/today/detail/move'
     | '/p/$project/'
     | '/p/$project/$canvas/'
     | '/p/$project/$canvas/focus/$frame'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/spike-canvas'
+    | '/spike/today'
+    | '/spike/me'
     | '/'
+    | '/spike'
+    | '/spike/today/detail'
     | '/embed/$project/$canvas/$frame'
     | '/play/$project/$canvas/$frame'
+    | '/spike/today/detail/move'
     | '/p/$project'
     | '/p/$project/$canvas'
     | '/p/$project/$canvas/focus/$frame'
   id:
     | '__root__'
+    | '/spike'
     | '/_app'
+    | '/spike-canvas'
+    | '/spike/today'
+    | '/spike/me'
     | '/_app/'
+    | '/spike/'
+    | '/spike/today/detail'
     | '/embed/$project/$canvas/$frame'
     | '/play/$project/$canvas/$frame'
+    | '/spike/today/detail/move'
     | '/_app/p/$project/'
     | '/_app/p/$project/$canvas/'
     | '/_app/p/$project/$canvas/focus/$frame'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  SpikeRouteRoute: typeof SpikeRouteRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
-  EmbedProjectCanvasFrameRoute: typeof EmbedProjectCanvasFrameRoute
-  PlayProjectCanvasFrameRoute: typeof PlayProjectCanvasFrameRoute
+  SpikeCanvasRoute: typeof SpikeCanvasRoute
+  EmbedDotprojectDotcanvasDotframeRoute: typeof EmbedDotprojectDotcanvasDotframeRoute
+  PlayDotprojectDotcanvasDotframeRoute: typeof PlayDotprojectDotcanvasDotframeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -122,71 +210,165 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/spike': {
+      id: '/spike'
+      path: '/spike'
+      fullPath: '/spike'
+      preLoaderRoute: typeof SpikeRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/spike-canvas': {
+      id: '/spike-canvas'
+      path: '/spike-canvas'
+      fullPath: '/spike-canvas'
+      preLoaderRoute: typeof SpikeCanvasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app/': {
       id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AppIndexRouteImport
+      preLoaderRoute: typeof AppDotindexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/spike/': {
+      id: '/spike/'
+      path: '/'
+      fullPath: '/spike/'
+      preLoaderRoute: typeof SpikeIndexRouteImport
+      parentRoute: typeof SpikeRouteRoute
+    }
+    '/spike/me': {
+      id: '/spike/me'
+      path: '/me'
+      fullPath: '/spike/me'
+      preLoaderRoute: typeof SpikeMeRouteImport
+      parentRoute: typeof SpikeRouteRoute
+    }
+    '/spike/today': {
+      id: '/spike/today'
+      path: '/today'
+      fullPath: '/spike/today'
+      preLoaderRoute: typeof SpikeTodayRouteRouteImport
+      parentRoute: typeof SpikeRouteRoute
+    }
+    '/spike/today/detail': {
+      id: '/spike/today/detail'
+      path: '/detail'
+      fullPath: '/spike/today/detail'
+      preLoaderRoute: typeof SpikeTodayDetailRouteRouteImport
+      parentRoute: typeof SpikeTodayRouteRoute
     }
     '/_app/p/$project/': {
       id: '/_app/p/$project/'
       path: '/p/$project'
       fullPath: '/p/$project/'
-      preLoaderRoute: typeof AppPProjectIndexRouteImport
+      preLoaderRoute: typeof AppDotpDotprojectDotindexRouteImport
       parentRoute: typeof AppRoute
     }
     '/embed/$project/$canvas/$frame': {
       id: '/embed/$project/$canvas/$frame'
       path: '/embed/$project/$canvas/$frame'
       fullPath: '/embed/$project/$canvas/$frame'
-      preLoaderRoute: typeof EmbedProjectCanvasFrameRouteImport
+      preLoaderRoute: typeof EmbedDotprojectDotcanvasDotframeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/play/$project/$canvas/$frame': {
       id: '/play/$project/$canvas/$frame'
       path: '/play/$project/$canvas/$frame'
       fullPath: '/play/$project/$canvas/$frame'
-      preLoaderRoute: typeof PlayProjectCanvasFrameRouteImport
+      preLoaderRoute: typeof PlayDotprojectDotcanvasDotframeRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/spike/today/detail/move': {
+      id: '/spike/today/detail/move'
+      path: '/move'
+      fullPath: '/spike/today/detail/move'
+      preLoaderRoute: typeof SpikeTodayDetailMoveRouteImport
+      parentRoute: typeof SpikeTodayDetailRouteRoute
     }
     '/_app/p/$project/$canvas/': {
       id: '/_app/p/$project/$canvas/'
       path: '/p/$project/$canvas'
       fullPath: '/p/$project/$canvas/'
-      preLoaderRoute: typeof AppPProjectCanvasIndexRouteImport
+      preLoaderRoute: typeof AppDotpDotprojectDotcanvasDotindexRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/p/$project/$canvas/focus/$frame': {
       id: '/_app/p/$project/$canvas/focus/$frame'
       path: '/p/$project/$canvas/focus/$frame'
       fullPath: '/p/$project/$canvas/focus/$frame'
-      preLoaderRoute: typeof AppPProjectCanvasFocusFrameRouteImport
+      preLoaderRoute: typeof AppDotpDotprojectDotcanvasDotfocusDotframeRouteImport
       parentRoute: typeof AppRoute
     }
   }
 }
 
+interface SpikeTodayDetailRouteRouteChildren {
+  SpikeTodayDetailMoveRoute: typeof SpikeTodayDetailMoveRoute
+}
+
+const SpikeTodayDetailRouteRouteChildren: SpikeTodayDetailRouteRouteChildren = {
+  SpikeTodayDetailMoveRoute: SpikeTodayDetailMoveRoute,
+}
+
+const SpikeTodayDetailRouteRouteWithChildren =
+  SpikeTodayDetailRouteRoute._addFileChildren(
+    SpikeTodayDetailRouteRouteChildren,
+  )
+
+interface SpikeTodayRouteRouteChildren {
+  SpikeTodayDetailRouteRoute: typeof SpikeTodayDetailRouteRouteWithChildren
+}
+
+const SpikeTodayRouteRouteChildren: SpikeTodayRouteRouteChildren = {
+  SpikeTodayDetailRouteRoute: SpikeTodayDetailRouteRouteWithChildren,
+}
+
+const SpikeTodayRouteRouteWithChildren = SpikeTodayRouteRoute._addFileChildren(
+  SpikeTodayRouteRouteChildren,
+)
+
+interface SpikeRouteRouteChildren {
+  SpikeTodayRouteRoute: typeof SpikeTodayRouteRouteWithChildren
+  SpikeMeRoute: typeof SpikeMeRoute
+  SpikeIndexRoute: typeof SpikeIndexRoute
+}
+
+const SpikeRouteRouteChildren: SpikeRouteRouteChildren = {
+  SpikeTodayRouteRoute: SpikeTodayRouteRouteWithChildren,
+  SpikeMeRoute: SpikeMeRoute,
+  SpikeIndexRoute: SpikeIndexRoute,
+}
+
+const SpikeRouteRouteWithChildren = SpikeRouteRoute._addFileChildren(
+  SpikeRouteRouteChildren,
+)
+
 interface AppRouteChildren {
-  AppIndexRoute: typeof AppIndexRoute
-  AppPProjectIndexRoute: typeof AppPProjectIndexRoute
-  AppPProjectCanvasIndexRoute: typeof AppPProjectCanvasIndexRoute
-  AppPProjectCanvasFocusFrameRoute: typeof AppPProjectCanvasFocusFrameRoute
+  AppDotindexRoute: typeof AppDotindexRoute
+  AppDotpDotprojectDotindexRoute: typeof AppDotpDotprojectDotindexRoute
+  AppDotpDotprojectDotcanvasDotindexRoute: typeof AppDotpDotprojectDotcanvasDotindexRoute
+  AppDotpDotprojectDotcanvasDotfocusDotframeRoute: typeof AppDotpDotprojectDotcanvasDotfocusDotframeRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppIndexRoute: AppIndexRoute,
-  AppPProjectIndexRoute: AppPProjectIndexRoute,
-  AppPProjectCanvasIndexRoute: AppPProjectCanvasIndexRoute,
-  AppPProjectCanvasFocusFrameRoute: AppPProjectCanvasFocusFrameRoute,
+  AppDotindexRoute: AppDotindexRoute,
+  AppDotpDotprojectDotindexRoute: AppDotpDotprojectDotindexRoute,
+  AppDotpDotprojectDotcanvasDotindexRoute:
+    AppDotpDotprojectDotcanvasDotindexRoute,
+  AppDotpDotprojectDotcanvasDotfocusDotframeRoute:
+    AppDotpDotprojectDotcanvasDotfocusDotframeRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  SpikeRouteRoute: SpikeRouteRouteWithChildren,
   AppRoute: AppRouteWithChildren,
-  EmbedProjectCanvasFrameRoute: EmbedProjectCanvasFrameRoute,
-  PlayProjectCanvasFrameRoute: PlayProjectCanvasFrameRoute,
+  SpikeCanvasRoute: SpikeCanvasRoute,
+  EmbedDotprojectDotcanvasDotframeRoute: EmbedDotprojectDotcanvasDotframeRoute,
+  PlayDotprojectDotcanvasDotframeRoute: PlayDotprojectDotcanvasDotframeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
