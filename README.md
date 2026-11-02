@@ -238,4 +238,4 @@ Contributions are welcome: bug reports, ideas, docs and pull requests. Read the 
 
 ## License
 
-[MIT](LICENSE) © 2026 Prashant Raj
+[MIT](LICENSE) © 2026 Synonymy
