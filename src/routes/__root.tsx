@@ -7,6 +7,7 @@ import {
   useLocation,
 } from '@tanstack/react-router'
 import { MiniAppHost } from '@/components/app/MiniAppHost'
+import { BootSplash } from '@/components/shell/BootSplash'
 import { useAppProjects } from '@/lib/workspace/store'
 
 export const Route = createRootRoute({
@@ -43,5 +44,10 @@ function Root() {
       </MiniAppHost>
     )
   }
-  return <Outlet />
+  return (
+    <>
+      <Outlet />
+      {config.mode !== 'share' && <BootSplash />}
+    </>
+  )
 }
