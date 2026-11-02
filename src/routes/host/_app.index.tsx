@@ -16,18 +16,19 @@ function Empty() {
       <div className="mx-auto max-w-xl py-24">
         <h1 className="text-3xl font-semibold tracking-tight">No projects yet</h1>
         <p className="mt-3 text-muted-foreground">
-          Springboard reads everything from the <code>projects/</code> folder. Create a
-          project with a canvas and a screen:
+          A project is a small app made of TanStack Router file routes. Create one under{' '}
+          <code>projects/</code>:
         </p>
         <pre className="mt-5 rounded-lg border bg-muted/40 p-4 font-mono text-[13px] leading-relaxed">
           {`projects/my-app/
   project.json          { "name": "My app" }
-  canvases/home/
-    canvas.json         frames and connectors
-    screens/Home.tsx    export default defineScreen({...})`}
+  app/
+    route.tsx           the app's root layout
+    home.tsx            a screen, at /my-app/home`}
         </pre>
         <p className="mt-4 text-sm text-muted-foreground">
-          The page updates as soon as the files exist. See the README for the full format.
+          Springboard picks it up straight away. See the README and AGENTS.md for the
+          details.
         </p>
       </div>
     </ProjectsLayout>

@@ -1,10 +1,37 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import {
+  createRootRoute,
+  Outlet,
+  retainSearchParams,
+  useLocation,
+} from '@tanstack/react-router'
+import { MiniAppHost } from '@/components/app/MiniAppHost'
+import { useAppProjects } from '@/lib/workspace/store'
 
 export const Route = createRootRoute({
-  component: Outlet,
+  // `v` holds variant choices for the screens of a mini app, so links can be
+  // shared. Kept across navigation.
+  validateSearch: (search: Record<string, unknown>): { v?: string } => ({
+    v: typeof search.v === 'string' && search.v ? search.v : undefined,
+  }),
+  search: { middlewares: [retainSearchParams(['v'])] },
+  component: Root,
   notFoundComponent: () => (
     <div className="grid h-full place-items-center text-sm text-muted-foreground">
       Nothing here.
     </div>
   ),
 })
+
+function Root() {
+  const { pathname } = useLocation()
+  const projects = useAppProjects()
+  const first = pathname.split('/')[1]
+  if (projects.includes(first)) {
+    return (
+      <MiniAppHost project={first}>
+        <Outlet />
+      </MiniAppHost>
+    )
+  }
+  return <Outlet />
+}

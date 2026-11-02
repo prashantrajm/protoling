@@ -5,12 +5,14 @@ import { routeTree } from './routeTree.gen'
 import './styles.css'
 // Reads projects/ into the store before the first route renders.
 import './lib/workspace/registry'
+import { setHostRouter } from './lib/router-registry'
 
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
   scrollRestoration: true,
 })
+setHostRouter(router)
 
 declare module '@tanstack/react-router' {
   interface Register {
