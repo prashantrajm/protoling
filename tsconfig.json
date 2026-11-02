@@ -1,5 +1,5 @@
 {
-  "include": ["src", "vite", "projects", "vite.config.ts", "vitest.config.ts"],
+  "include": ["src", "vite", "projects", "scripts", "vite.config.ts", "vitest.config.ts"],
   "compilerOptions": {
     "target": "ES2024",
     "lib": ["ES2024", "DOM", "DOM.Iterable"],

@@ -11,6 +11,7 @@
       "vite/**",
       "projects/**/*.tsx",
       "*.ts",
+      "scripts/**",
       "*.json",
       ".vscode/*.json",
       "!src/routeTree.gen.ts"
