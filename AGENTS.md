@@ -85,6 +85,11 @@ Before saying a screen is done:
 2. `bun run typecheck` and `bun run lint`.
 3. Open `http://localhost:3000/p/<project>/play/<path>` and tap through the flow.
 
+## Sharing
+
+- A preview link is the site's address plus the app path, e.g. `http://localhost:3000/orbit/today?v=today:soft-spring`: the app on its own, with the screen and variant in the URL. Share in the play view copies it.
+- For a client, build only the prototypes: list them in `protoling.config.ts`, then `bun run build:share` writes a deployable `dist/` with none of Protoling's tooling. See "Sharing a prototype" in the README for deploying.
+
 ## Don't
 
 - Don't build navigation by hand (state machines, conditional rendering of screens). Use routes.
