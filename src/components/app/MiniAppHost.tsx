@@ -324,20 +324,21 @@ function DeviceMenu({
   screen: TopScreen
   mode: 'device' | 'present'
 }) {
-  // A share build has no tooling to exit to, so the menu restarts the app.
-  const shared = config.mode === 'share'
+  // Preview mode by default: the menu restarts the app. Only on your own dev
+  // server does it offer Exit preview, back into Protoling's tooling.
+  const canExit = import.meta.env.DEV && config.mode !== 'share'
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const openRef = useRef(open)
   openRef.current = open
   useThreeFingerTap(() => setOpen((o) => !o))
 
-  // Exit to Protoling's project page, or in a share build restart the app.
+  // Exit to Protoling's project page, or restart the app.
   const leave = useCallback(() => {
     setOpen(false)
-    if (shared) void router.navigate({ to: `/${project}`, replace: true } as never)
-    else void router.navigate({ to: '/p/$project', params: { project } } as never)
-  }, [router, project, shared])
+    if (canExit) void router.navigate({ to: '/p/$project', params: { project } } as never)
+    else void router.navigate({ to: `/${project}`, replace: true } as never)
+  }, [router, project, canExit])
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -347,14 +348,14 @@ function DeviceMenu({
       } else if (event.key === 'Escape') {
         // Escape closes the menu first; it only exits when there's tooling to exit to.
         if (openRef.current) setOpen(false)
-        else if (!shared) leave()
+        else if (canExit) leave()
       }
     }
     window.addEventListener('keydown', onKey)
     return () => {
       window.removeEventListener('keydown', onKey)
     }
-  }, [leave, shared])
+  }, [leave, canExit])
 
   const mac = /Mac|iPhone|iPad/.test(navigator.platform)
 
@@ -366,7 +367,7 @@ function DeviceMenu({
       variantId={screen?.variantId ?? 'default'}
       onVariant={(id) => screen && setVariantInUrl(router, screen.key, id)}
       onClose={() => setOpen(false)}
-      action={shared ? 'restart' : 'exit'}
+      action={canExit ? 'exit' : 'restart'}
       onAction={leave}
       hint={
         mode === 'present'

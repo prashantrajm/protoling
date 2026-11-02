@@ -1,10 +1,13 @@
 import { createFileRoute, Link, notFound, useNavigate } from '@tanstack/react-router'
 import {
   ChevronLeft,
+  ExternalLink,
+  Link2,
   Maximize,
   Minimize,
   PanelRight,
   RotateCcw,
+  Share,
   Smartphone,
   Snail,
 } from 'lucide-react'
@@ -12,6 +15,12 @@ import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { Inspector } from '@/components/inspector/Inspector'
 import { VariantSwitcher } from '@/components/preview/VariantSwitcher'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Kbd } from '@/components/ui/kbd'
 import {
   Select,
@@ -24,6 +33,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { type FromApp, readMessage, type ScreenSnapshot, type ToApp } from '@/lib/bridge'
 import { deviceIds, devices, getDevice } from '@/lib/devices'
 import { useEditor, useTimeScale } from '@/lib/editor'
+import { appPath, copyPreviewLink, openPreview } from '@/lib/preview-link'
 import { fileForRoute } from '@/lib/screens'
 import { cn } from '@/lib/utils'
 import { findProject, useProjectEntry, useWorkspace } from '@/lib/workspace/store'
@@ -201,6 +211,9 @@ function PlayPage() {
             >
               <Snail />
             </HeaderButton>
+            <SharePreview
+              path={() => appPath(project, _splat ?? '', window.location.search)}
+            />
             <HeaderButton label="Open on phone" onClick={() => openPhone(true)}>
               <Smartphone />
             </HeaderButton>
@@ -312,5 +325,38 @@ function HeaderButton({
         {shortcut && <Kbd>{shortcut}</Kbd>}
       </TooltipContent>
     </Tooltip>
+  )
+}
+
+/**
+ * Share: the app on its own at this site's address, for anyone to open.
+ * The path is read when you click, so it's always the screen and variant on
+ * the phone right now.
+ */
+function SharePreview({ path }: { path: () => string }) {
+  return (
+    <DropdownMenu>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DropdownMenuTrigger
+            aria-label="Share preview"
+            className="grid size-9 place-items-center rounded-lg text-muted-foreground outline-none transition-colors hover:bg-foreground/5 hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand [&_svg]:size-[18px]"
+          >
+            <Share />
+          </DropdownMenuTrigger>
+        </TooltipTrigger>
+        <TooltipContent>Share preview</TooltipContent>
+      </Tooltip>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuItem onSelect={() => void copyPreviewLink(path())}>
+          <Link2 />
+          Copy preview link
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => openPreview(path())}>
+          <ExternalLink />
+          Open preview
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

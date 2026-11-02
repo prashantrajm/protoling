@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **Share** in the play view: copy a preview link, or open the preview in a new tab. Board frames have a copy-link button. Links use the site you're on, so they work locally and when deployed, with nothing to configure.
 - **Share builds** (`bun run build:share`): a deployable site with only the prototypes chosen in `protoling.config.ts` and none of Protoling's tooling. The root URL and unknown paths go to a start screen, and links keep their screen and `?v=` variant. Deploy notes for Vercel (`vercel.json` included) and Cloudflare Pages. ([#3](https://github.com/prashantrajm/protoling/issues/3))
 - Opening an app URL in a desktop browser shows the app alone in a phone frame, at real device size, instead of stretched across the window.
 - MIT license.
@@ -15,7 +16,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
-- In share builds, the hidden phone menu offers **Restart** instead of **Exit preview**, and Escape only closes it.
+- Previews open in preview mode: the hidden menu offers **Restart** instead of **Exit preview**, and Escape only closes it. **Exit preview** remains on your own dev server.
+
+### Fixed
+
+- Going back from a screen opened directly (no history to return to) no longer carries that screen's own query params, like `?task=`, to its parent. Variant choices (`?v=`) are kept.
 
 ## [0.1.0] - 2026-11-02
 

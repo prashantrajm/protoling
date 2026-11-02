@@ -1,6 +1,6 @@
 import { type AnyRouter, useNavigate, useRouterState } from '@tanstack/react-router'
 import { Handle, type Node, type NodeProps, Position } from '@xyflow/react'
-import { Play, RotateCcw } from 'lucide-react'
+import { Link2, Play, RotateCcw } from 'lucide-react'
 import { memo, useEffect, useState } from 'react'
 import { MiniAppFrame } from '@/components/app/MiniAppFrame'
 import { VariantSwitcher } from '@/components/preview/VariantSwitcher'
@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import type { ResolvedFrame } from '@/lib/boards'
 import type { Device } from '@/lib/devices'
 import { useEditor, useTimeScale } from '@/lib/editor'
+import { copyPreviewLink } from '@/lib/preview-link'
 import { topScreenSnapshot } from '@/lib/snapshot'
 import { cn } from '@/lib/utils'
 import { setVariantInUrl } from '@/runtime/screen'
@@ -59,6 +60,16 @@ export const FrameNode = memo(function FrameNode({ data }: NodeProps<FrameNodeTy
             selected && 'opacity-100',
           )}
         >
+          <IconButton
+            label="Copy preview link"
+            onClick={() => {
+              // The frame's current screen and variant, which may differ from its start.
+              const here = current(router, frame.url)
+              void copyPreviewLink(here.pathname + here.search)
+            }}
+          >
+            <Link2 className="size-4" />
+          </IconButton>
           <IconButton label="Replay from the start" onClick={() => replayFrame(frame.id)}>
             <RotateCcw className="size-4" />
           </IconButton>

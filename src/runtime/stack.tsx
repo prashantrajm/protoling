@@ -108,7 +108,11 @@ export function StackScreen({ children }: { children: ReactNode }) {
     else
       void router.navigate({
         to: parent,
-        search: (s: object) => s,
+        // Keep only the params the parent's routes validate: Today keeps ?v=
+        // but not Detail's ?task=, while Detail keeps ?task= when a sheet on
+        // top of it closes. `_strictSearch` is TanStack's per-match record of
+        // exactly those; if it ever goes away, the root still keeps ?v=.
+        search: (current as { _strictSearch?: object })._strictSearch ?? {},
         replace: true,
       } as never)
   }, [router, current.pathname, app])

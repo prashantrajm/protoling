@@ -156,6 +156,10 @@ Every project also gets an **All screens** board, with arrows taken from its rou
 
 Any app URL opened on its own, like `/orbit/today`, shows **just the app**: alone in a phone frame on a desktop browser, and edge to edge on a phone. That's the link to send.
 
+To get it, use **Share** in the play view (next to replay and slow motion), which can **copy the preview link** or **open the preview** in a new tab. Each frame on a board has a copy-link button too. The link is the site you're on plus the app's path, screen and variant, so it's `localhost` when you're running locally and your own domain when Protoling is deployed. There's nothing to configure.
+
+Preview links open in **preview mode**: the hidden menu offers **Restart**, and nothing in the preview points to Protoling's tooling. Only on your own dev server (`bun run dev`) does the menu also offer **Exit preview**, back to the project. On a deployed full build, the tooling is still there at `/p/...` for your team; it just isn't linked from the preview.
+
 To send it to a client or teammate, deploy a **share build**. It contains only the prototypes, with none of Protoling's tooling: no sidebar, boards, inspector or handoff code, and no other projects.
 
 1. Choose what to share in `protoling.config.ts`:
@@ -176,7 +180,7 @@ To send it to a client or teammate, deploy a **share build**. It contains only t
    bun run preview       # optional: try it locally
    ```
 
-In a share build, the root URL and anything outside the shared projects go to `start`, and the hidden menu (three-finger tap, or ⌘ . on a desktop) offers **Restart** instead of Exit preview. Links keep their screen and variant (`?v=…`), so you can send exactly the version you want feedback on.
+In a share build, the root URL and anything outside the shared projects go to `start`, and nothing at all leads to tooling, because it isn't in the build. Links keep their screen and variant (`?v=…`), so you can send exactly the version you want feedback on.
 
 ### Deploying
 
