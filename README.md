@@ -234,8 +234,8 @@ vite/                  project discovery and the read-only dev endpoint
 
 ## Contributing
 
-Contributions are welcome. Open an issue to discuss a bug or an idea, or send a pull request.
+Contributions are welcome: bug reports, ideas, docs and pull requests. Read the [contributing guide](CONTRIBUTING.md) to get set up, and please follow the [code of conduct](CODE_OF_CONDUCT.md). Report security problems privately, as described in the [security policy](SECURITY.md). Changes are listed in the [changelog](CHANGELOG.md).
 
-1. Fork the repository and create a branch from `main`.
-2. Make your change. Check that `bun run lint`, `bun run test` and `bun run build` pass.
-3. Open a pull request describing what changed and why.
+## License
+
+[MIT](LICENSE) © 2026 Synonymy
