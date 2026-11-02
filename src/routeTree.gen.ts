@@ -9,50 +9,184 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as AppPProjectIndexRouteImport } from './routes/_app.p.$project.index'
+import { Route as EmbedProjectCanvasFrameRouteImport } from './routes/embed.$project.$canvas.$frame'
+import { Route as PlayProjectCanvasFrameRouteImport } from './routes/play.$project.$canvas.$frame'
+import { Route as AppPProjectCanvasIndexRouteImport } from './routes/_app.p.$project.$canvas.index'
+import { Route as AppPProjectCanvasFocusFrameRouteImport } from './routes/_app.p.$project.$canvas.focus.$frame'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPProjectIndexRoute = AppPProjectIndexRouteImport.update({
+  id: '/p/$project/',
+  path: '/p/$project/',
+  getParentRoute: () => AppRoute,
+} as any)
+const EmbedProjectCanvasFrameRoute = EmbedProjectCanvasFrameRouteImport.update({
+  id: '/embed/$project/$canvas/$frame',
+  path: '/embed/$project/$canvas/$frame',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlayProjectCanvasFrameRoute = PlayProjectCanvasFrameRouteImport.update({
+  id: '/play/$project/$canvas/$frame',
+  path: '/play/$project/$canvas/$frame',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppPProjectCanvasIndexRoute = AppPProjectCanvasIndexRouteImport.update({
+  id: '/p/$project/$canvas/',
+  path: '/p/$project/$canvas/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPProjectCanvasFocusFrameRoute =
+  AppPProjectCanvasFocusFrameRouteImport.update({
+    id: '/p/$project/$canvas/focus/$frame',
+    path: '/p/$project/$canvas/focus/$frame',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
+  '/embed/$project/$canvas/$frame': typeof EmbedProjectCanvasFrameRoute
+  '/play/$project/$canvas/$frame': typeof PlayProjectCanvasFrameRoute
+  '/p/$project/': typeof AppPProjectIndexRoute
+  '/p/$project/$canvas/': typeof AppPProjectCanvasIndexRoute
+  '/p/$project/$canvas/focus/$frame': typeof AppPProjectCanvasFocusFrameRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
+  '/embed/$project/$canvas/$frame': typeof EmbedProjectCanvasFrameRoute
+  '/play/$project/$canvas/$frame': typeof PlayProjectCanvasFrameRoute
+  '/p/$project': typeof AppPProjectIndexRoute
+  '/p/$project/$canvas': typeof AppPProjectCanvasIndexRoute
+  '/p/$project/$canvas/focus/$frame': typeof AppPProjectCanvasFocusFrameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_app/': typeof AppIndexRoute
+  '/embed/$project/$canvas/$frame': typeof EmbedProjectCanvasFrameRoute
+  '/play/$project/$canvas/$frame': typeof PlayProjectCanvasFrameRoute
+  '/_app/p/$project/': typeof AppPProjectIndexRoute
+  '/_app/p/$project/$canvas/': typeof AppPProjectCanvasIndexRoute
+  '/_app/p/$project/$canvas/focus/$frame': typeof AppPProjectCanvasFocusFrameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/embed/$project/$canvas/$frame'
+    | '/play/$project/$canvas/$frame'
+    | '/p/$project/'
+    | '/p/$project/$canvas/'
+    | '/p/$project/$canvas/focus/$frame'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/embed/$project/$canvas/$frame'
+    | '/play/$project/$canvas/$frame'
+    | '/p/$project'
+    | '/p/$project/$canvas'
+    | '/p/$project/$canvas/focus/$frame'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_app/'
+    | '/embed/$project/$canvas/$frame'
+    | '/play/$project/$canvas/$frame'
+    | '/_app/p/$project/'
+    | '/_app/p/$project/$canvas/'
+    | '/_app/p/$project/$canvas/focus/$frame'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  EmbedProjectCanvasFrameRoute: typeof EmbedProjectCanvasFrameRoute
+  PlayProjectCanvasFrameRoute: typeof PlayProjectCanvasFrameRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/p/$project/': {
+      id: '/_app/p/$project/'
+      path: '/p/$project'
+      fullPath: '/p/$project/'
+      preLoaderRoute: typeof AppPProjectIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/embed/$project/$canvas/$frame': {
+      id: '/embed/$project/$canvas/$frame'
+      path: '/embed/$project/$canvas/$frame'
+      fullPath: '/embed/$project/$canvas/$frame'
+      preLoaderRoute: typeof EmbedProjectCanvasFrameRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/play/$project/$canvas/$frame': {
+      id: '/play/$project/$canvas/$frame'
+      path: '/play/$project/$canvas/$frame'
+      fullPath: '/play/$project/$canvas/$frame'
+      preLoaderRoute: typeof PlayProjectCanvasFrameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/p/$project/$canvas/': {
+      id: '/_app/p/$project/$canvas/'
+      path: '/p/$project/$canvas'
+      fullPath: '/p/$project/$canvas/'
+      preLoaderRoute: typeof AppPProjectCanvasIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/p/$project/$canvas/focus/$frame': {
+      id: '/_app/p/$project/$canvas/focus/$frame'
+      path: '/p/$project/$canvas/focus/$frame'
+      fullPath: '/p/$project/$canvas/focus/$frame'
+      preLoaderRoute: typeof AppPProjectCanvasFocusFrameRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
+interface AppRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+  AppPProjectIndexRoute: typeof AppPProjectIndexRoute
+  AppPProjectCanvasIndexRoute: typeof AppPProjectCanvasIndexRoute
+  AppPProjectCanvasFocusFrameRoute: typeof AppPProjectCanvasFocusFrameRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+  AppPProjectIndexRoute: AppPProjectIndexRoute,
+  AppPProjectCanvasIndexRoute: AppPProjectCanvasIndexRoute,
+  AppPProjectCanvasFocusFrameRoute: AppPProjectCanvasFocusFrameRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  EmbedProjectCanvasFrameRoute: EmbedProjectCanvasFrameRoute,
+  PlayProjectCanvasFrameRoute: PlayProjectCanvasFrameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
