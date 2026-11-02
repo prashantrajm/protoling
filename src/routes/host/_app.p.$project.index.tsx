@@ -6,7 +6,6 @@ import { ProjectsLayout } from '@/components/shell/ProjectsLayout'
 import { Button } from '@/components/ui/button'
 import { projectBoards } from '@/lib/boards'
 import { useEditor } from '@/lib/editor'
-import { timeAgo } from '@/lib/time'
 import { findProject, useProjectEntry, useWorkspace } from '@/lib/workspace/store'
 
 export const Route = createFileRoute('/_app/p/$project/')({
@@ -19,7 +18,6 @@ export const Route = createFileRoute('/_app/p/$project/')({
 function ProjectPage() {
   const { project: slug } = Route.useParams()
   const entry = useProjectEntry(slug)
-  const updatedAt = useWorkspace((s) => s.meta?.updatedAt[slug])
   const openPhone = useEditor((s) => s.setPhoneDialogOpen)
   // Only one card plays at a time.
   const [active, setActive] = useState<string | null>(null)
@@ -30,33 +28,21 @@ function ProjectPage() {
   const name = entry.project?.name ?? slug
   const device = entry.project?.device
   const boards = entry.hasApp ? projectBoards(entry) : []
-  const edited = timeAgo(updatedAt)
 
   return (
     <ProjectsLayout>
-      <nav
-        className="flex items-center gap-2 text-[15px] text-muted-foreground"
-        aria-label="Breadcrumb"
-      >
-        <Link to="/" className="hover:text-foreground">
-          Projects
-        </Link>
-        <ChevronRight className="size-4" />
-        <span className="text-foreground">{name}</span>
-      </nav>
-
-      <header className="mt-12 flex items-end justify-between gap-6">
-        <div>
-          <h1 className="text-[40px] font-semibold tracking-tight">{name}</h1>
-          {entry.project?.description && (
-            <p className="mt-1 text-xl text-muted-foreground">
-              {entry.project.description}
-            </p>
-          )}
-          {edited && (
-            <p className="mt-2 text-sm text-muted-foreground">Edited {edited}</p>
-          )}
-        </div>
+      {/* One row: where you are and what you can do. The previews say the rest. */}
+      <header className="flex items-center justify-between gap-6">
+        <nav
+          className="flex items-center gap-2 text-[15px] text-muted-foreground"
+          aria-label="Breadcrumb"
+        >
+          <Link to="/" className="hover:text-foreground">
+            Projects
+          </Link>
+          <ChevronRight className="size-4" />
+          <h1 className="font-normal text-foreground">{name}</h1>
+        </nav>
         {entry.hasApp && (
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => openPhone(true)}>
@@ -80,7 +66,7 @@ function ProjectPage() {
       )}
 
       {!entry.hasApp ? (
-        <div className="mt-12 max-w-xl rounded-xl border p-6 text-sm">
+        <div className="mt-8 max-w-xl rounded-xl border p-6 text-sm">
           <p className="font-medium">This project has no app yet.</p>
           <p className="mt-1 text-muted-foreground">
             Create <code>projects/{slug}/app/route.tsx</code>. Everything in{' '}
@@ -89,7 +75,7 @@ function ProjectPage() {
           </p>
         </div>
       ) : (
-        <ul className="mt-12 grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-7">
+        <ul className="mt-8 grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-7">
           <li>
             <PreviewCard
               link={{ to: '/p/$project/play/$', params: { project: slug, _splat: '' } }}

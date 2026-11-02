@@ -1,7 +1,6 @@
 import {
   Background,
   BackgroundVariant,
-  MiniMap,
   ReactFlow,
   ReactFlowProvider,
   useReactFlow,
@@ -141,15 +140,6 @@ function Board({
             gap={16}
             size={1.4}
             color="var(--canvas-dot)"
-          />
-          <MiniMap
-            pannable
-            zoomable
-            style={{ width: 150, height: 96 }}
-            className="!rounded-lg !border !bg-background/80"
-            maskColor="color-mix(in oklab, var(--canvas) 70%, transparent)"
-            nodeColor="var(--frame-border)"
-            nodeBorderRadius={12}
           />
         </ReactFlow>
         <BoardToolbar

@@ -1,11 +1,18 @@
 import { useMatches, useRouter, useRouterState } from '@tanstack/react-router'
-import { MotionConfig, motion, useMotionValue, useTransform } from 'motion/react'
+import {
+  LayoutGroup,
+  MotionConfig,
+  motion,
+  useMotionValue,
+  useTransform,
+} from 'motion/react'
 import {
   type CSSProperties,
   type ReactNode,
   useCallback,
   useContext,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -52,6 +59,7 @@ export function MiniAppHost({
   const playing = frame?.playing ?? true
   const replayKey = (frame?.replayKey ?? 0) + replay
 
+  const layoutScope = useId()
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null)
   const sheetProgress = useMotionValue(0)
   const scale = useTransform(sheetProgress, [0, 1], [1, 0.92])
@@ -116,9 +124,13 @@ export function MiniAppHost({
           style={{ scale, borderRadius: radius }}
         >
           <MotionConfig reducedMotion="user" skipAnimations={!playing}>
-            <div key={replayKey} className="h-full">
-              {children}
-            </div>
+            {/* layoutId is page-wide in Motion. Several copies of an app share
+                a page on boards and thumbnails, so each gets its own scope. */}
+            <LayoutGroup id={layoutScope}>
+              <div key={replayKey} className="h-full">
+                {children}
+              </div>
+            </LayoutGroup>
           </MotionConfig>
         </motion.div>
         <div

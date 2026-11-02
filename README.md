@@ -6,6 +6,8 @@ Springboard is an open-source starter for prototyping how a mobile app _works an
 
 > **Status:** early development. Expect breaking changes.
 
+![Springboard's play view: the Orbit example app running on an iPhone 17 Pro frame, with the inspector showing the Detail screen's push transition and its spring physics](docs/screenshots/play.png)
+
 ---
 
 ## Why Springboard
@@ -136,6 +138,18 @@ A screen on a board is a 402 px box inside a desktop window, so `100vh` and view
 - Use the `--safe-top`, `--safe-bottom`, `--safe-left` and `--safe-right` CSS variables for insets. They match the device on desktop and use the real `env(safe-area-inset-*)` on a phone.
 - `position: fixed` is contained by the frame.
 
+## A look around
+
+**Boards** put app states side by side. Here, three variants of the same screen run next to each other, and the inspector shows the selected variant's springs:
+
+![A board comparing three variants of the Today screen, with the Soft spring variant selected and its motion curves in the inspector](docs/screenshots/board.png)
+
+Every project also gets an **All screens** board, with arrows taken from its routes. Light, dark and system themes:
+
+![The All screens board in dark mode: eight live screens of the Orbit app in a row, with Push and Sheet arrows between them](docs/screenshots/board-dark.png)
+
+![The Orbit project page in dark mode, with live previews of the app and its boards](docs/screenshots/project-dark.png)
+
 ## Using Springboard
 
 | Surface | What it's for |
@@ -212,6 +226,7 @@ src/
   lib/                 devices, motion maths, handoff, boards, workspace
   routes/host/         Springboard's own pages
 scripts/snap.ts        render app states to PNGs
+docs/screenshots/      images used in this README
 vite/                  project discovery and the read-only dev endpoint
 ```
 
